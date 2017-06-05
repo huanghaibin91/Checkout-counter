@@ -86,7 +86,7 @@
             padding: 20px 20px;
             transition: all 1s ease;
             position: absolute;
-            top: -124px;
+            top: -126px;
             z-index: 3;
             background: white;
             >div {

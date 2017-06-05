@@ -1,52 +1,202 @@
 <template>
     <div class="storage">
-        <p>商品入库</p>
+        <div class="storage-title">
+            <span>商品入库单</span>
+            <button title="商品入库细则" @click="changeRuleFlag"></button>
+            <transition name="fade">
+                <p v-if="storageRuleFlag">
+                    <span>商品入库细则：</span><br />
+                    <span>1.如果是新商品，请详细填报所有信息。</span><br />
+                    <span>2.商品名称可以相同，但商品编码唯一。</span><br />
+                    <span>3.当同一商品再次进货入库，可以进行便捷入库操作。</span><br />
+                    <span>4.便捷入库，输入商品条码，显示可以进行便捷入库后，填写数量和保质期，其他选项可以省略，商品将会作为已有商品的新批次入库。</span>
+                </p>
+            </transition>
+        </div>
         <form class="storage-input">
             <div>
-                <label>商品名称</label><input id="shopping-name" type='type' placeholder="请输入商品名称" required />
-                <span></span>
+                <label for="shopping-name">商品名称</label>
+                <div>
+                    <input id="shopping-name" v-model="name" @blur="checkName" placeholder="请输入商品名称" />
+                    <span v-if="nameFlag === ''"></span>
+                    <span v-else="nameFlag === 'exists'" class="correct">商品名称已存在，可以尝试更改商品名称</span>
+                </div>
             </div>
             <div>
-                <label>商品编码</label><input id="shopping-coding" type='type' placeholder="请输入商品编码" required />
-                <span>商品编码为纯数字，不含字母或符号</span>
+                <label for="shopping-coding">商品编码</label>
+                <div>
+                    <input id="shopping-coding" v-model="coding" @blur="checkCoding" placeholder="请输入商品编码" />
+                    <span v-if="codingFlag === ''"></span>
+                    <span v-else-if="codingFlag === 'error'" class="error">商品编码为纯数字，不含字母或符号</span>
+                    <span v-else-if="codingFlag === 'correct'" class="correct">商品编码输入格式正确</span>
+                    <span v-else="codingFlag === 'exists'" class="correct">商品编码已存在，可以按便捷入库操作</span>
+                </div>
             </div>
             <div>
-                <label>商品价格</label><input id="shopping-price" type='type' placeholder="请输入商品价格" required />
-                <span>商品价格为数字，且最多一位小数</span>
+                <label for="shopping-price">商品价格</label>
+                <div>
+                    <input id="shopping-price" v-model="price" placeholder="请输入商品价格" />
+                    <span v-if="priceFlag === ''"></span>
+                    <span v-else-if="priceFlag === 'error'" class="error">商品价格输入错误，应是大于0且最多一位小数的数字</span>
+                    <span v-else="priceFlag === 'correct'" class="correct">输入价格格式正确</span>
+                </div>
             </div>
-            <div><label>商品品类</label>
-                <select>
-                    <option>休闲零食</option>
-                    <option>酒水饮料</option>
-                    <option>粮油副食</option>
-                    <option>生鲜水果</option>
-                    <option>日常洗护</option>
-                </select>
+            <div>
+                <label for="shopping-number">商品数量</label>
+                <div>
+                    <input id="shopping-number" v-model="number" placeholder="请输入商品数量" />
+                    <span v-if="numberFlag === ''"></span>
+                    <span v-else-if="numberFlag === 'error'" class="error">商品数量错误，应是大于0的整数</span>
+                    <span v-else="numberFlag === 'correct'" class="correct">输入数量格式正确</span>
+                </div>
+            </div>
+            <div>
+                <label for="shopping-category">商品品类</label>
+                <div>
+                    <select id="shopping-category" v-model="category">
+                        <option value="休闲零食">休闲零食</option>
+                        <option value="酒水饮料">酒水饮料</option>
+                        <option value="粮油副食">粮油副食</option>
+                        <option value="生鲜水果">生鲜水果</option>
+                        <option value="日常洗护">日常洗护</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <label for="shopping-date">商品保质期</label>
-                <select>
-                    <option>2017</option>
-                </select>
-                -
-                <select>
-                    <option v-for="index in 12" v-bind:value="index">{{index}}</option>
-                </select>
-                -
-                <select>
-                    <option>27</option>
-                </select>
+                <div>
+                    <calendar @getdate="setdate"></calendar>
+                </div>
             </div>
-            <div><label for="shopping-image">商品图片</label><input type="file" /></div>
-            <div class="storage-submit"><button>确认提交</button></div>
+            <div class="storage-submit"><button type="submit" @click="addShopping">确认提交</button></div>
         </form>
     </div>
 </template>
 
 <script>
+    import calendar from './calendar.vue'
+
     export default {
         name: 'storage',
-        
+        components: {
+            calendar,
+        },
+        data () {
+            return {
+                name: '',
+                coding: '',
+                price: '',
+                number: '',
+                category: '休闲零食',
+                date: '',
+                // 商品列表
+                shoppingList: this.$store.state.shoppingList,
+                // 显示隐藏判定
+                storageRuleFlag: false,
+                nameFlag: '',
+                codingFlag: '',
+                priceFlag: '',
+                numberFlag: '',
+            }
+        },
+        methods: {
+            changeRuleFlag () {
+                this.storageRuleFlag = !this.storageRuleFlag;
+            },
+            checkName () {
+                for (let i = 0; i < this.shoppingList.length; i++) {
+                    if (this.shoppingList[i].name === this.name) {
+                        return this.nameFlag = 'exists';
+                    }
+                }
+            },
+            checkCoding () {
+                for (let i = 0; i < this.shoppingList.length; i++) {
+                    if (this.shoppingList[i].coding === this.coding) {
+                        return this.codingFlag = 'exists';
+                    }
+                }
+            },
+            setdate (arg) {
+                this.date = arg;
+            },
+            addShopping () {
+                if (this.codingFlag === 'exists') {
+                    for (let i = 0; i < this.shoppingList.length; i++) {
+                        if (this.shoppingList[i].coding === this.coding) {
+                            let newBatch = new Object();
+                            newBatch.number = this.number;
+                            newBatch.date = this.date;
+                            let obj = new Object();
+                            obj.index = i;
+                            obj.batch = newBatch;
+                            this.$store.commit('addShoppingBatch', obj)
+                        }
+                    }
+                } else {
+                    let newShopping = new Object();
+                    newShopping.name = this.name;
+                    newShopping.coding = this.coding;
+                    newShopping.price = this.price;
+                    newShopping.category = this.category;
+                    newShopping.batchArray = new Array();
+                    let batch = new Object();
+                    batch.number = this.number;
+                    batch.date = this.date;
+                    newShopping.batchArray.push(batch)
+                    this.$store.commit('addShopping', newShopping);
+                }
+                this.name = '';
+                this.coding = '';
+                this.price = '';
+                this.number = '';
+                this.category = '休闲零食';
+            },
+        }, 
+        watch: {
+            name: function (val) {
+                if (val === '') {
+                    this.nameFlag = '';
+                }
+            },
+            coding: function (val) {
+                let reg = /^[0-9]\d*$/g;
+                if (val === '') {
+                    this.codingFlag = '';
+                } else {
+                    if (reg.test(val)) {
+                        this.codingFlag = 'correct';
+                    } else {
+                        this.codingFlag = 'error';
+                    }
+                }
+                
+            },
+            price: function (val) {
+                let reg = /^(\d+\.\d{1,1}|\d+)$/g;
+                if (val === '') {
+                    this.priceFlag = '';
+                } else {
+                    if (reg.test(val)) {
+                        this.priceFlag = 'correct';
+                    } else {
+                        this.priceFlag = 'error';
+                    }
+                }
+            },
+            number: function (val) {
+                let reg = /^[1-9]\d*$/g;
+                if (val === '') {
+                    this.numberFlag = '';
+                } else {
+                    if (reg.test(val)) {
+                        this.numberFlag = 'correct';
+                    } else {
+                        this.numberFlag = 'error';
+                    }
+                }
+            }, 
+        }
     }
 </script>
 
@@ -54,52 +204,107 @@
     .storage {
         width: 896px;
         padding: 10px 20px;
-        >p {
+        >div.storage-title {
+            height: 30px;
             border-left: 5px solid aqua;
             text-indent: 1em;
             font-size: 20px;
             font-weight: bold;
+            line-height: 30px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            >button {
+                width: 24px;
+                height: 24px;
+                margin-left: 10px;
+                text-align: center;
+                border: none;
+                border-radius: 50%;
+                background: url('../assets/image/question-mark.png') no-repeat center;
+                background-size: cover;
+            }
+            .fade-enter-active, .fade-leave-active {
+                transition: all 0.5s;
+            }
+            .fade-enter, .fade-leave-active {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            p {
+                position: absolute;
+                top: 30px;
+                left: 0px;
+                width: 250px;
+                padding: 10px;
+                font-size: 14px;
+                font-weight: normal;
+                text-align: left;
+                border: 1px solid #A8A8A8;
+                box-shadow: 2px 2px 2px #ccc;
+                background: white;
+                span:nth-child(1) {
+                    font-weight: bold;
+                }
+            }
         }
         form.storage-input {
-            width: 340px;
+            width: 500px;
             margin: auto;
             padding: 20px 50px;
-            border: 1px solid #333;
-            div {
+            margin-bottom: 150px;
+            >div {
                 display: flex;
-                margin: 20px 0px;
-                padding-bottom: 20px;
-                position: relative;
-                label, input {
-                    display: block;
-                }
+                margin: 40px 0px;
                 label {
-                    width: 80px;
+                    width: 150px;
                     text-align: right;
-                    margin-right: 20px;
+                    margin-right: 30px;
                     line-height: 32px;
+                    font-weight: bold;
                 }
-                input {
-                    width: 200px;
-                    padding: 5px;
-                    border: 1px solid #333;
-                }
-                span {
-                    position: absolute;
-                    font-size: 14px;
-                    top: 40px;
-                    left: 100px;
+                >div {
+                    width: 350px;
+                    label, input, span, select {
+                        display: block;
+                    }
+                    >input {
+                        width: 200px;
+                        padding: 5px 10px;
+                        border: 1px solid #A9A9A9;
+                    }
+                    >span {
+                        font-size: 14px;
+                        margin-top: 10px;
+                        position: absolute;
+                    }
+                    >span.error {
+                        color: #DF000C;
+                    }
+                    >span.correct {
+                        color: #60BB46;
+                    }
+                    select {
+                        margin-top: 2px;
+                        padding: 3px;
+                    }
+                    >div {
+                        margin: 0;
+                        padding: 0;
+                    }
                 }
             }
             div.storage-submit {
-                justify-content: flex-end;
+                justify-content: center;
                 button {
-                    width: 100px;
+                    width: 80px;
                     height: 30px;
-                    background: white;
-                    border: 1px solid #333;
+                    color: white;
+                    background: #52616b;
+                    border-radius: 3px;
+                    border: none;
                     &:hover {
-                        background: #52616b;
+                        background: #2F79BA;
                         color: white;
                     }
                 }

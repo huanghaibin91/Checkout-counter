@@ -23,6 +23,7 @@
         margin-left: 50px;
         padding-top: 20px;
         background: #eee;
+        min-height: 500px;
         ul{
             padding-left: 0;
             li {

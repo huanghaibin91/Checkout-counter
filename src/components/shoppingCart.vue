@@ -4,7 +4,7 @@
         <table cellspacing="0">
             <thead>
                 <tr>
-                    <td><input id="check-all" type="checkbox" /><label for="check-all">全选</label></td>
+                    <td><input id="check-all" type="checkbox" /><label for="check-all">&nbsp;全选</label></td>
                     <td>名称</td>
                     <td>数量</td>
                     <td>金额</td>
@@ -12,6 +12,20 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td><img src="../assets/image/17193476.jpg" /><span>限购型黑猫限购型黑猫限购型黑猫限购型黑猫限购型黑猫</span></td>
+                    <td><button>-</button><input type="text" value="1" /><button>+</button></td>
+                    <td>￥ <span>199</span></td>
+                    <td><button>删除</button></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td><img src="../assets/image/17193476.jpg" /><span>限购型黑猫限购型黑猫限购型黑猫限购型黑猫限购型黑猫</span></td>
+                    <td><button>-</button><input type="text" value="1" /><button>+</button></td>
+                    <td>￥ <span>199</span></td>
+                    <td><button>删除</button></td>
+                </tr>
                 <tr>
                     <td><input type="checkbox" /></td>
                     <td><img src="../assets/image/17193476.jpg" /><span>限购型黑猫限购型黑猫限购型黑猫限购型黑猫限购型黑猫</span></td>
@@ -34,7 +48,10 @@
 <script>
     export default {
         name: 'shoppingCart',
-        
+        data () {
+
+        },
+
     }
 </script>
 

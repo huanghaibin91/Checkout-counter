@@ -10,11 +10,11 @@
       <oNav></oNav>
       <!--<router-view></router-view>-->
       <!--<quickSearch></quickSearch>-->
-      <!--<shoppingList></shoppingList>-->
+      <shoppingList></shoppingList>
       <!--<storage></storage>-->
       <!--<shoppingCart></shoppingCart>-->
       <!--<shoppingRecord></shoppingRecord>-->
-      <calender></calender>
+      <!--<calender></calender>-->
     </div>
   </div>
 </template>
