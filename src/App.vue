@@ -9,10 +9,9 @@
     <div class="container">
       <oNav></oNav>
       <!--<router-view></router-view>-->
-      <!--<quickSearch></quickSearch>-->
-      <shoppingList></shoppingList>
+      <!--<shoppingList></shoppingList>-->
       <!--<storage></storage>-->
-      <!--<shoppingCart></shoppingCart>-->
+      <shoppingCart></shoppingCart>
       <!--<shoppingRecord></shoppingRecord>-->
       <!--<calender></calender>-->
     </div>
@@ -24,7 +23,6 @@
   import signIn from './components/signIn.vue'
   import search from './components/search.vue'
   import oNav from './components/nav.vue'
-  import quickSearch from './components/quickSearch.vue'
   import shoppingList from './components/shoppingList.vue'
   import storage from './components/storage.vue'
   import shoppingCart from './components/shoppingCart.vue'
@@ -41,7 +39,6 @@
       storage,
       shoppingCart,
       shoppingRecord,
-      quickSearch,
       calender,
     },
   }

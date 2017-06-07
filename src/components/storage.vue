@@ -83,6 +83,7 @@
         },
         data () {
             return {
+                // 表单输入的各项值
                 name: '',
                 coding: '',
                 price: '',
@@ -100,9 +101,11 @@
             }
         },
         methods: {
+            // 入库规则弹出隐藏
             changeRuleFlag () {
                 this.storageRuleFlag = !this.storageRuleFlag;
             },
+            // 检查商品名称
             checkName () {
                 for (let i = 0; i < this.shoppingList.length; i++) {
                     if (this.shoppingList[i].name === this.name) {
@@ -110,6 +113,7 @@
                     }
                 }
             },
+            // 检查商品编码
             checkCoding () {
                 for (let i = 0; i < this.shoppingList.length; i++) {
                     if (this.shoppingList[i].coding === this.coding) {
@@ -117,16 +121,20 @@
                     }
                 }
             },
+            // 从子组件calendar获取数据
             setdate (arg) {
                 this.date = arg;
             },
+            // 添加商品入库
             addShopping () {
                 if (this.codingFlag === 'exists') {
                     for (let i = 0; i < this.shoppingList.length; i++) {
                         if (this.shoppingList[i].coding === this.coding) {
+                            // 新批次
                             let newBatch = new Object();
                             newBatch.number = this.number;
                             newBatch.date = this.date;
+                            // 将新批次作为参数传递到原有商品上
                             let obj = new Object();
                             obj.index = i;
                             obj.batch = newBatch;
@@ -139,11 +147,8 @@
                     newShopping.coding = this.coding;
                     newShopping.price = this.price;
                     newShopping.category = this.category;
-                    newShopping.batchArray = new Array();
-                    let batch = new Object();
-                    batch.number = this.number;
-                    batch.date = this.date;
-                    newShopping.batchArray.push(batch)
+                    newShopping.number = this.number;
+                    newShopping.date = this.date;
                     this.$store.commit('addShopping', newShopping);
                 }
                 this.name = '';
@@ -151,6 +156,7 @@
                 this.price = '';
                 this.number = '';
                 this.category = '休闲零食';
+                this.date = '';
             },
         }, 
         watch: {

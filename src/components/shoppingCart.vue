@@ -12,27 +12,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <!--<tr v-for="shopping in shoppingCartList">
                     <td><input type="checkbox" /></td>
-                    <td><img src="../assets/image/17193476.jpg" /><span>限购型黑猫限购型黑猫限购型黑猫限购型黑猫限购型黑猫</span></td>
-                    <td><button>-</button><input type="text" value="1" /><button>+</button></td>
-                    <td>￥ <span>199</span></td>
+                    <td><img :src="imgUrl(shopping)" /><span>{{ shopping.name }}</span></td>
+                    <td><button @click="reduceShoppingNum">-</button><input v-model="shoppingNum" /><button @click="addShoppingNum(shopping)">+</button></td>
+                    <td>￥ <span>{{ shopping.price }}</span></td>
                     <td><button>删除</button></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td><img src="../assets/image/17193476.jpg" /><span>限购型黑猫限购型黑猫限购型黑猫限购型黑猫限购型黑猫</span></td>
-                    <td><button>-</button><input type="text" value="1" /><button>+</button></td>
-                    <td>￥ <span>199</span></td>
-                    <td><button>删除</button></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td><img src="../assets/image/17193476.jpg" /><span>限购型黑猫限购型黑猫限购型黑猫限购型黑猫限购型黑猫</span></td>
-                    <td><button>-</button><input type="text" value="1" /><button>+</button></td>
-                    <td>￥ <span>199</span></td>
-                    <td><button>删除</button></td>
-                </tr>
+                </tr>-->
+                <shoppingCartList v-for="(shopping, index) in shoppingCartList" :getShopping="shopping" :getIndex='index' :key="shopping.coding"></shoppingCartList>
             </tbody>
             <tfoot>
                 <tr>
@@ -46,12 +33,39 @@
 </template>
 
 <script>
+
+    import shoppingCartList from './shoppingCartList.vue'
+
     export default {
         name: 'shoppingCart',
-        data () {
-
+        components: {
+            shoppingCartList,
         },
-
+        data () {
+            return {
+                shoppingCartList: this.$store.state.shoppingCartList,
+            }
+        },
+        methods: {
+            // // 商品图片
+            // imgUrl (shopping) {
+            //     // webpack中一切皆模块，都可以用require引入
+            //     return require('../assets/shopping-images/' + shopping.coding + '.jpg');
+            // },
+            // // 商品数量加一
+            // addShoppingNum (shopping) {
+            //     // if (this.shoppingNum < shopping.number) {
+            //         // return this.shoppingNum++;
+            //         this.shoppingNum++;
+            //     // }
+            // },
+            // // 商品数量减一
+            // reduceShoppingNum () {
+            //     if (this.shoppingNum > 1) {
+            //         return this.shoppingNum--;
+            //     }
+            // }
+        }
     }
 </script>
 
@@ -92,71 +106,11 @@
             thead tr {
                 width: 100%;
                 height: 40px;
+                font-size: 16px;
+                font-weight: bold;
                 background: #F8F8F8;
                 th {
                     border-bottom: 1px solid #EAEAEA;
-                }
-            }
-            tbody tr {
-                td {
-                    padding: 10px 0px;
-                }
-                td:nth-child(1) {
-
-                }
-                td:nth-child(2) {
-                    text-align: left;
-                    img {
-                        width: 80px;
-                        height: 60px;
-                        float: left;
-                        vertical-align: middle;
-                        padding-right: 20px;
-                    }
-                    span {
-                        margin-top: 10px;
-                        font-size : 14px;
-                        color: #333;
-                    }
-                }
-                td:nth-child(3) {
-                    button, input {
-                        display: inline-block;
-                        height: 30px;
-                        border: none;
-                        padding: 0;
-                        font-size: 14px;
-                        text-align: center;
-                    }
-                    button {
-                        width: 40px;
-                        background: white;
-                        border: 1px solid #EAEAEA;
-                        font-size: 18px;
-                        font-weight: bold;
-                    }
-                    input {
-                        width: 50px;
-                        background: white;;
-                        color: #E11935;
-                    }
-                }
-                td:nth-child(4) {
-                    font-size: 16px;
-                    color: #E11935;
-                    span {
-                        font-size: 18px;
-                    }
-                }
-                td:nth-child(5) {
-                    button {
-                        background: white;
-                        border: none;
-                        color: #E11935;
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
                 }
             }
             tfoot tr {

@@ -1,6 +1,7 @@
 <template>
     <div class="shopping-list">
         <div class="quick-search">
+            <button>全部品类</button>
             <button>休闲零食</button>
             <button>酒水饮料</button>
             <button>粮油副食</button>
@@ -8,15 +9,15 @@
             <button>日常洗护</button>
         </div>
         <div class="shoppingList-screen">
-            <div>
-                <img src="../assets/image/17193476.jpg" />
+            <div v-for="shopping in shoppingList">
+                <img :src="imgUrl(shopping)" />
                 <div>
-                    <p>宠物型黑猫型限购2017年纪念版</p>
-                    <p>￥<span>1999</span></p>
-                    <p>库存<span>1999</span>件</p>
+                    <p>{{ shopping.name }}</p>
+                    <p>￥<span>{{ shopping.price }}</span></p>
+                    <p>库存<span>&nbsp;{{ shopping.number }}&nbsp;</span>件</p>
                 </div>
                 <div>
-                    <button>加入购物车</button>
+                    <button @click="addShoppingCart(shopping)">加入购物车</button>
                 </div>
             </div>
         </div>
@@ -25,7 +26,24 @@
 
 <script>
     export default {
-
+        name:　'shoppingList',
+        data () {
+            return {
+                me: 'hello',
+                shoppingList: this.$store.state.shoppingList,
+            }
+        },
+        methods: {
+            // 商品图片
+            imgUrl (shopping) {
+                // webpack中一切皆模块，都可以用require引入
+                return require('../assets/shopping-images/' + shopping.coding + '.jpg');
+            },
+            // 添加商品至购物车列表
+            addShoppingCart (shopping) {
+                this.$store.commit('addShoppingCart', shopping);
+            },
+        }
     }
 </script>
 
@@ -33,7 +51,7 @@
     .shopping-list {
         width: 896px;
         >div.quick-search {
-            width: 896px;
+            width: 100%;
             height: 30px;
             padding: 10px 20px 0px 20px;
             button {
@@ -49,13 +67,13 @@
             }
         }
         >div.shoppingList-screen {
+            width: 100%;            
             display: flex;
-            padding: 0px 20px;
             flex-wrap: wrap;
-            justify-content: space-between;
             >div {
                 width: 200px;
-                margin-top: 10px;
+                height: 220px;
+                margin: 10px 0px 0px 20px;
                 border: 1px solid #ccc;
                 position: relative;
                 &:hover {
@@ -80,17 +98,18 @@
                         overflow: hidden;
                     }
                     p:nth-child(1) {
-                        width: 177px;
                         color: #333;
-                        padding-left: 13px;
+                        width: 190px;
+                        padding: 5px;
                         font-size: 14px;
                         font-weight: bold;
                     }
                     p:nth-child(2) {
                         height: 30px;
-                        color: #E11935;
-                        padding-left: 10px;
+                        color: #F33F00;
+                        padding-left: 5px;
                         font-size: 16px;
+                        font-weight: bold;
                         line-height: 30px;
                         span {
                             font: bold 20px;
@@ -99,12 +118,11 @@
                     p:nth-child(3) {
                         height: 30px;
                         color: #444;
-                        padding-right: 10px;
+                        padding-right: 5px;
                         font-size: 14px;
-                        font-weight: bold;
                         line-height: 32px;
                         span {
-                            color: #E11935;
+                            color: #F33F00;
                             font: bold 14px;
                         }
                     }
