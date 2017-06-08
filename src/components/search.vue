@@ -4,15 +4,36 @@
             <input type="text" placeholder="输入商品名称或编码查询" />
         </div>
         <div class="shopping-btn">
-            <button><img src="../assets/image/shopping-cart.png" /><span>购物车</span><span>2</span></button>
+            <button><img src="../assets/image/shopping-cart.png" /><span>购物车</span><span v-if="shoppingCartListNumberFlag">{{ shoppingCartListNumber }}</span></button>
         </div>
     </div>
 </template>
 
 <script>
+
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'search',
-        
+        data () {
+            return {
+                shoppingCartListNumberFlag: true,
+            }
+        },
+        watch: {
+            shoppingCartListNumber: function (val) {
+                if (val === 0) {
+                    return this.shoppingCartListNumberFlag = false;
+                } else {
+                    return this.shoppingCartListNumberFlag = true;
+                }
+            },
+        },
+        computed: {
+            ...mapGetters([
+                'shoppingCartListNumber',
+            ]),
+        },
     }
 </script>
 

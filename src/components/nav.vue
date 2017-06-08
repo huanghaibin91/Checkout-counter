@@ -3,8 +3,8 @@
         <ul>
             <li><a href="#">在售商品</a></li>
             <li><a href="#">进货入库</a></li>
-            <li><a href="#">异常出库</a></li>
             <li><a href="#">收银台</a></li>
+            <li><a href="#">其它操作</a></li>
             <li><a href="#">消息通知<span>2</span></a></li>
         </ul>
     </div>

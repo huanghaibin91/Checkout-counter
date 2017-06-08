@@ -1,10 +1,11 @@
 <template>
     <div class="shopping-cart">
         <p>购物车</p>
+        {{this.$store.state.shoppingFlag}}, {{this.$store.state.shoppingNumber}}
         <table cellspacing="0">
             <thead>
                 <tr>
-                    <td><input id="check-all" type="checkbox" /><label for="check-all">&nbsp;全选</label></td>
+                    <td><input v-model="checkAll" id="check-all"  type="checkbox" /><label for="check-all">&nbsp;全选</label></td>
                     <td>名称</td>
                     <td>数量</td>
                     <td>金额</td>
@@ -12,19 +13,12 @@
                 </tr>
             </thead>
             <tbody>
-                <!--<tr v-for="shopping in shoppingCartList">
-                    <td><input type="checkbox" /></td>
-                    <td><img :src="imgUrl(shopping)" /><span>{{ shopping.name }}</span></td>
-                    <td><button @click="reduceShoppingNum">-</button><input v-model="shoppingNum" /><button @click="addShoppingNum(shopping)">+</button></td>
-                    <td>￥ <span>{{ shopping.price }}</span></td>
-                    <td><button>删除</button></td>
-                </tr>-->
                 <shoppingCartList v-for="(shopping, index) in shoppingCartList" :getShopping="shopping" :getIndex='index' :key="shopping.coding"></shoppingCartList>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3">已选商品<span>0</span>件</td>
-                    <td>合计: ￥<span>12220</span></td>
+                    <td colspan="3">已选商品<span>{{ shoppingNumberTotal }}</span>件</td>
+                    <td>合计: ￥<span>{{ 0 }}</span></td>
                     <td><button>结&nbsp;&nbsp;&nbsp;算</button></td>
                 </tr>
             </tfoot>
@@ -35,6 +29,7 @@
 <script>
 
     import shoppingCartList from './shoppingCartList.vue'
+    import { mapState, mapGetters } from 'vuex'
 
     export default {
         name: 'shoppingCart',
@@ -43,29 +38,47 @@
         },
         data () {
             return {
-                shoppingCartList: this.$store.state.shoppingCartList,
+                checkAll: true,
+                shoppingNumberTotal: 0,
             }
         },
+        watch: {
+            // 监听全选按钮
+            checkAll: function (val) {
+                if (val === true) {
+                    this.$store.commit("checkAllShopping");
+                } else {
+                    this.$store.commit("uncheckAllShopping");
+                }
+            },
+            // 监听购物车中每种商品的数量
+            shoppingNumber: function (val) {
+                console.log('hello');
+                for (let i = 0; i < shoppingCartList.length; i++) {
+                    if (shoppingFlag[i] === true) {
+                        this.shoppingNumberTotal += state.shoppingNumber[i];
+                    }
+                }
+            },
+            hello: function () {
+                console.log('hello');
+            },
+        },
+        computed: {
+            ...mapState([
+                'shoppingCartList',
+                'shoppingFlag',
+                'shoppingNumber',
+            ]),
+            ...mapGetters([
+                // 'shoppingNumberTotal',
+                // 'shoppingPriceTotal'
+                'hello',
+            ]),
+        },
         methods: {
-            // // 商品图片
-            // imgUrl (shopping) {
-            //     // webpack中一切皆模块，都可以用require引入
-            //     return require('../assets/shopping-images/' + shopping.coding + '.jpg');
-            // },
-            // // 商品数量加一
-            // addShoppingNum (shopping) {
-            //     // if (this.shoppingNum < shopping.number) {
-            //         // return this.shoppingNum++;
-            //         this.shoppingNum++;
-            //     // }
-            // },
-            // // 商品数量减一
-            // reduceShoppingNum () {
-            //     if (this.shoppingNum > 1) {
-            //         return this.shoppingNum--;
-            //     }
-            // }
-        }
+            
+        },
     }
 </script>
 
