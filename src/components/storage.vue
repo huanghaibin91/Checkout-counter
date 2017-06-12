@@ -15,14 +15,6 @@
         </div>
         <form class="storage-input">
             <div>
-                <label for="shopping-name">商品名称</label>
-                <div>
-                    <input id="shopping-name" v-model="name" @blur="checkName" placeholder="请输入商品名称" />
-                    <span v-if="nameFlag === ''"></span>
-                    <span v-else="nameFlag === 'exists'" class="correct">商品名称已存在，可以尝试更改商品名称</span>
-                </div>
-            </div>
-            <div>
                 <label for="shopping-coding">商品编码</label>
                 <div>
                     <input id="shopping-coding" v-model="coding" @blur="checkCoding" placeholder="请输入商品编码" />
@@ -33,12 +25,11 @@
                 </div>
             </div>
             <div>
-                <label for="shopping-price">商品价格</label>
+                <label for="shopping-name">商品名称</label>
                 <div>
-                    <input id="shopping-price" v-model="price" placeholder="请输入商品价格" />
-                    <span v-if="priceFlag === ''"></span>
-                    <span v-else-if="priceFlag === 'error'" class="error">商品价格输入错误，应是大于0且最多一位小数的数字</span>
-                    <span v-else="priceFlag === 'correct'" class="correct">输入价格格式正确</span>
+                    <input id="shopping-name" v-model="name" @blur="checkName" placeholder="请输入商品名称" />
+                    <span v-if="nameFlag === ''"></span>
+                    <span v-else="nameFlag === 'exists'" class="correct">商品名称已存在，可以尝试更改商品名称</span>
                 </div>
             </div>
             <div>
@@ -48,6 +39,15 @@
                     <span v-if="numberFlag === ''"></span>
                     <span v-else-if="numberFlag === 'error'" class="error">商品数量错误，应是大于0的整数</span>
                     <span v-else="numberFlag === 'correct'" class="correct">输入数量格式正确</span>
+                </div>
+            </div>
+            <div>
+                <label for="shopping-price">商品价格</label>
+                <div>
+                    <input id="shopping-price" v-model="price" placeholder="请输入商品价格" />
+                    <span v-if="priceFlag === ''"></span>
+                    <span v-else-if="priceFlag === 'error'" class="error">商品价格输入错误，应是大于0且最多一位小数的数字</span>
+                    <span v-else="priceFlag === 'correct'" class="correct">输入价格格式正确</span>
                 </div>
             </div>
             <div>
@@ -208,13 +208,14 @@
 
 <style lang="scss">
     .storage {
-        width: 896px;
+        width: 700px;
+        margin: 31px auto;
         padding: 10px 20px;
         >div.storage-title {
             height: 30px;
             border-left: 5px solid aqua;
             text-indent: 1em;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             line-height: 30px;
             position: relative;

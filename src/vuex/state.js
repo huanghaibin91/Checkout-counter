@@ -39,8 +39,11 @@ export default  {
         {name: '52度剑南春浓香型白酒500ml*6瓶', coding: '00000017', price: 2148, category: '酒水饮料',number: 2, date: '2027-7-18',},
     ],
     // 购物车中商品选中状态
+    // 全选状态
+    checkAllFlag: true,
+    // 各个商品选中状态
     shoppingFlag : [
-        false, false,
+        true, true,
     ],
     // 购物车中每种商品的数量
     shoppingNumber: [

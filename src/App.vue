@@ -1,53 +1,38 @@
 <template>
   <div id="app">
-    <header>
-      <div>
-        <signIn></signIn>
-        <search></search>
-      </div>
-    </header>
-    <div class="container">
-      <oNav></oNav>
-      <!--<router-view></router-view>-->
-      <!--<shoppingList></shoppingList>-->
-      <!--<storage></storage>-->
-      <shoppingCart></shoppingCart>
-      <!--<shoppingRecord></shoppingRecord>-->
-      <!--<calender></calender>-->
-    </div>
+    <oheader></oheader>
+    <shoppingList></shoppingList>
+    <!--<storage></storage>-->
+    <!--<shoppingCart></shoppingCart>-->
+    <!--<commodityOperations></commodityOperations>-->
   </div>
 </template>
 
 <script>
 
-  import signIn from './components/signIn.vue'
-  import search from './components/search.vue'
-  import oNav from './components/nav.vue'
+  import oheader from './components/header.vue'
   import shoppingList from './components/shoppingList.vue'
   import storage from './components/storage.vue'
   import shoppingCart from './components/shoppingCart.vue'
   import shoppingRecord from './components/shoppingRecord.vue'
+  import commodityOperations from './components/commodityOperations.vue'
   import calender from './components/calendar.vue'
 
   export default {
     name: 'app',
     components: {
-      signIn,
-      search,
-      oNav,
+      oheader,
       shoppingList,
       storage,
       shoppingCart,
       shoppingRecord,
       calender,
+      commodityOperations,
     },
   }
 </script>
 
-<style lang="scss">
-  body {
-    overflow-y: scroll;
-  }
+<style lang="scss"> 
   button {
     cursor: pointer;
   }
@@ -56,22 +41,13 @@
   }
   a {
     text-decoration: none;
+    cursor: pointer;
   }
   #app {
-    header {
-      height: 60px;
-      border-bottom: 2px solid #333;
-      font-family: "Microsoft YaHei" sans-serif;
-      >div {
-        width: 1200px;
-        height: 100%;
-        margin: auto;
-        display: flex;
-      }
-    }
+    font-family: Arial "Microsoft YaHei" sans-serif;
     .container {
       width: 1200px;
-      margin: auto;
+      margin: 31px auto;
       display: flex;
     }
   }

@@ -1,5 +1,13 @@
 <template>
     <div class="shopping-list">
+        <div id="search" class="search">
+            <div class="search-input">
+                <input type="text" placeholder="输入商品名称或编码查询" />
+            </div>
+            <div class="shopping-btn">
+                <button><img src="../assets/image/shopping-cart.png" /><span>购物车</span><span v-if="shoppingCartListNumberFlag">{{ shoppingCartListNumber }}</span></button>
+            </div>
+        </div>
         <div class="quick-search">
             <button>全部品类</button>
             <button>休闲零食</button>
@@ -9,29 +17,55 @@
             <button>日常洗护</button>
         </div>
         <div class="shoppingList-screen">
-            <div v-for="shopping in shoppingList">
+            <div v-for="shopping in shoppingList" title="加入购物车">
                 <img :src="imgUrl(shopping)" />
                 <div>
                     <p>{{ shopping.name }}</p>
                     <p>￥<span>{{ shopping.price }}</span></p>
                     <p>库存<span>&nbsp;{{ shopping.number }}&nbsp;</span>件</p>
                 </div>
-                <div>
-                    <button @click="addShoppingCart(shopping)">加入购物车</button>
-                </div>
+                <div @click="addShoppingCart(shopping)"></div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    // 页面滚动
+    window.onscroll = function () {
+        let search = document.querySelector('#search');
+        let top = document.body.scrollTop || document.documentElement.scrollTop;
+        if (top > 200) {
+            search.className = 'search isFixed';
+        } else {
+            search.className = 'search';
+        }
+    }
+
+    import { mapGetters } from 'vuex'
+
     export default {
         name:　'shoppingList',
         data () {
             return {
-                me: 'hello',
+                shoppingCartListNumberFlag: true,
                 shoppingList: this.$store.state.shoppingList,
             }
+        },
+        watch: {
+            // 购物车按钮显示购物车中商品数量
+            shoppingCartListNumber: function (val) {
+                if (val === 0) {
+                    return this.shoppingCartListNumberFlag = false;
+                } else {
+                    return this.shoppingCartListNumberFlag = true;
+                }
+            },
+        },
+        computed: {
+            ...mapGetters([
+                'shoppingCartListNumber',
+            ]),
         },
         methods: {
             // 商品图片
@@ -49,15 +83,71 @@
 
 <style lang="scss">
     .shopping-list {
-        width: 896px;
-        >div.quick-search {
+        width: 100%;
+        margin: 31px auto;
+        >div.isFixed {
+            background: white;
+            box-shadow: 0px 2px 2px #ccc;
+            position: fixed;
+            top: 31px;
+            left: 0px;
+            z-index: 99;
+        }
+        >div.search {
+            height: 60px;
             width: 100%;
+            display: flex;
+            justify-content: center;
+            .search-input, .shopping-btn, .shopping-btn button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .search-input {
+                width: 600px;
+                height: 100%;
+                input {
+                    height: 32px;
+                    width: 500px;
+                    padding-left: 40px;
+                    border: 2px solid #333;
+                    background: url("../assets/image/search.png") no-repeat left center;
+                }
+            }
+            .shopping-btn {
+                width: 300px;
+                height: 100%;
+                button {
+                    width: 150px;
+                    height: 38px;
+                    border: 2px solid #333;
+                    background: white;
+                    span:nth-child(2) {
+                        padding: 0 10px;
+                    }
+                    span:nth-child(3) {
+                        width: 30px;
+                        height: 30px;
+                        text-align: center;
+                        line-height: 30px;
+                        border-radius: 50%;
+                        background: #ff2e63;
+                        color: white;
+                    }
+                    &:hover {
+                        background: #ededee;
+                    }
+                }
+            }
+        }
+        >div.quick-search {
             height: 30px;
-            padding: 10px 20px 0px 20px;
+            padding-left: 253px;
             button {
                 margin-right: 10px;
+                padding: 2px;
                 background: white;
-                border: 1px solid #333;
+                border: none;
                 font-size: 14px;
                 font-weight: bold;
                 &:hover {
@@ -67,18 +157,20 @@
             }
         }
         >div.shoppingList-screen {
-            width: 100%;            
+            width: 100%;           
             display: flex;
             flex-wrap: wrap;
             >div {
                 width: 200px;
-                height: 220px;
+                height: 250px;
                 margin: 10px 0px 0px 20px;
                 border: 1px solid #ccc;
                 position: relative;
+                cursor: pointer;
+                box-shadow: 2px 2px 2px #ccc;
                 &:hover {
                     >div:nth-child(3) {
-                        opacity: 0.82;
+                        opacity: 0.8;
                     }
                 }
                 img {
@@ -98,11 +190,11 @@
                         overflow: hidden;
                     }
                     p:nth-child(1) {
-                        color: #333;
+                        color: black;
                         width: 190px;
+                        height: 32px;
                         padding: 5px;
                         font-size: 14px;
-                        font-weight: bold;
                     }
                     p:nth-child(2) {
                         height: 30px;
@@ -129,29 +221,12 @@
                 }
                 >div:nth-child(3) {
                     width: 200px;
-                    height: 220px;
-                    background: #ccc;
+                    height: 250px;
+                    background: #fffdef url('../assets/image/plus.png') no-repeat center;
                     opacity: 0;
-                    transition: all 1 ease;
+                    transition: all 0.5s ease;
                     position: absolute;
                     top: 0px;
-                    button {
-                        width: 100px;
-                        height: 50px;
-                        background: white;
-                        opacity: 0.82;
-                        border: 1px solid #E11935;
-                        position: relative;
-                        top: 85px;
-                        left: 50px;
-                        color: #E11935;
-                        font-size: 16px;
-                        font-weight: bold;
-                        &:hover {
-                            color: white;
-                            background: #E11935;
-                        }
-                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 <template>
     <tr class="shoppingCartList" :style="changeColor">
         <td>
-            <input v-model="shoppingFlag" @click="changeShoppingFlag(getIndex)" type="checkbox" />
+            <input v-model="shoppingCartListFlag" @click="changeShoppingFlag(getIndex)" type="checkbox" />
         </td>
         <td>
             <img :src="imgUrl(getShopping)" />
@@ -13,6 +13,9 @@
             <button @click="addShoppingNum(getShopping)">+</button>
         </td>
         <td>
+            {{ getShopping.price }}
+        </td>
+        <td>
             ￥&nbsp;<span>{{ shoppingPrice(getShopping) }}</span>
         </td>
         <td>
@@ -22,27 +25,34 @@
 </template>
 
 <script>
+
+    import { mapState } from 'vuex'
+
     export default {
         name: 'shoppingCartList',
         data () {
             return {
                 shoppingNum: 1,
-                // shoppingCartListFlag: true,
             }
         },
         props: ['getShopping', 'getIndex',],
         computed: {
+            // store中数据
+            ...mapState([
+                'checkAllFlag',
+                'shoppingFlag',
+            ]),
             // 选中后改变背景色
             changeColor () {
-                if (this.chooseShopping === true) {
+                if (this.shoppingCartListFlag === true) {
                     return {
                         background: '#FFFBF0'
                     }
                 }
             },
             // store中的shoppingFlag
-            shoppingFlag () {
-                return this.$store.state.shoppingFlag[this.getIndex];
+            shoppingCartListFlag () {
+                return this.shoppingFlag[this.getIndex];
             },
         },
         watch: {
@@ -51,7 +61,7 @@
                 let obj = new Object();
                 obj.index = this.getIndex;
                 obj.num = val;
-                this.$store.commit('changeShoppingNumber', obj);
+                this.$store.commit('changeShoppingCartNumber', obj);
             }, 
         },
         methods: {
@@ -63,7 +73,21 @@
             // 更改商品选中状态
             changeShoppingFlag (index) {
                 this.$store.commit('changeShoppingFlag', index);
-                console.log(this.$store.state.shoppingFlag);
+                this.isCheckAll();
+            },
+            // 根据是否全选更改全选按钮状态
+            isCheckAll () {
+                let num = 0;
+                for (let i = 0; i < this.shoppingFlag.length; i++) {
+                    if(this.shoppingFlag[i] === true) {
+                        num++;
+                    }
+                }
+                if (this.checkAllFlag === false && num === this.shoppingFlag.length) {
+                    this.$store.commit("changeCheckAll");
+                } else if (this.checkAllFlag === true && num !== this.shoppingFlag.length) {
+                    this.$store.commit("changeCheckAll");
+                }
             },
             // 直接输入数量
             inputNum (shopping) {
@@ -97,6 +121,7 @@
             // 删除商品
             deleteShopping (index) {
                 this.$store.commit('deleteShoppingCart', index);
+                this.isCheckAll();
             },
             // 获取input里的文字
             selected (e) {
@@ -154,13 +179,16 @@
             }
         }
         td:nth-child(4) {
+            color: #E11935;
+        }
+        td:nth-child(5) {
             font-size: 16px;
             color: #E11935;
             span {
                 font-size: 18px;
             }
         }
-        td:nth-child(5) {
+        td:nth-child(6) {
             button {
                 background: white;
                 border: none;

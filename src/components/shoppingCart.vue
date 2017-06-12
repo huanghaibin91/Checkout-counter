@@ -1,13 +1,13 @@
 <template>
     <div class="shopping-cart">
         <p>购物车</p>
-        {{this.$store.state.shoppingFlag}}, {{this.$store.state.shoppingNumber}}
         <table cellspacing="0">
             <thead>
                 <tr>
-                    <td><input v-model="checkAll" id="check-all"  type="checkbox" /><label for="check-all">&nbsp;全选</label></td>
+                    <td><input v-model="checkAllFlag" @click="changeCheckAll" id="check-all"  type="checkbox" /><label for="check-all">&nbsp;全选</label></td>
                     <td>名称</td>
                     <td>数量</td>
+                    <td>单价</td>
                     <td>金额</td>
                     <td>操作</td>
                 </tr>
@@ -18,7 +18,7 @@
             <tfoot>
                 <tr>
                     <td colspan="3">已选商品<span>{{ shoppingNumberTotal }}</span>件</td>
-                    <td>合计: ￥<span>{{ 0 }}</span></td>
+                    <td colspan="2">合计: ￥<span>{{ shoppingPriceTotal }}</span></td>
                     <td><button>结&nbsp;&nbsp;&nbsp;算</button></td>
                 </tr>
             </tfoot>
@@ -36,55 +36,34 @@
         components: {
             shoppingCartList,
         },
-        data () {
-            return {
-                checkAll: true,
-                shoppingNumberTotal: 0,
-            }
+        computed: {
+            ...mapState([
+               'shoppingCartList',
+               'checkAllFlag',
+            ]),
+            ...mapGetters([
+                'shoppingNumberTotal',
+                'shoppingPriceTotal',
+            ]),
         },
-        watch: {
-            // 监听全选按钮
-            checkAll: function (val) {
-                if (val === true) {
+        methods: {
+            // 改变全选状态
+            changeCheckAll () {
+                this.$store.commit("changeCheckAll");
+                if (this.checkAllFlag === true) {
                     this.$store.commit("checkAllShopping");
                 } else {
                     this.$store.commit("uncheckAllShopping");
                 }
-            },
-            // 监听购物车中每种商品的数量
-            shoppingNumber: function (val) {
-                console.log('hello');
-                for (let i = 0; i < shoppingCartList.length; i++) {
-                    if (shoppingFlag[i] === true) {
-                        this.shoppingNumberTotal += state.shoppingNumber[i];
-                    }
-                }
-            },
-            hello: function () {
-                console.log('hello');
-            },
-        },
-        computed: {
-            ...mapState([
-                'shoppingCartList',
-                'shoppingFlag',
-                'shoppingNumber',
-            ]),
-            ...mapGetters([
-                // 'shoppingNumberTotal',
-                // 'shoppingPriceTotal'
-                'hello',
-            ]),
-        },
-        methods: {
-            
+            }
         },
     }
 </script>
 
 <style lang="scss">
     .shopping-cart {
-        width: 896px;
+        width: 1000px;
+        margin: 31px auto;
         padding: 10px 20px;
         p {
             border-left: 5px solid aqua;
@@ -107,9 +86,12 @@
                 width: 20%;
             }
             th:nth-child(4), td:nth-child(4) {
-                width: 20%;
+                width: 10%;
             }
             th:nth-child(5), td:nth-child(5) {
+                width: 10%;
+            }
+            th:nth-child(6), td:nth-child(6) {
                 width: 10%;
             }
             tr {
