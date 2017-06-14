@@ -20,6 +20,13 @@ export default {
         state.shoppingFlag.push(true);
         state.shoppingNumber.push(1);
     },
+    // 改变购物车按钮数字显示
+    trueShoppingCartListNumberFlag (state) {
+        state.shoppingCartListNumberFlag = true;
+    },
+    falseShoppingCartListNumberFlag (state) {
+        state.shoppingCartListNumberFlag = false;
+    },
 
     // 购物车部分
     // 更改商品选中状态
@@ -61,6 +68,40 @@ export default {
         state.shoppingFlag.splice(index, 1);
         state.shoppingNumber.splice(index, 1);
     },
+    // 结算部分
+    // 结算框显示隐藏
+    changeCheckOutFlag (state) {
+        state.checkOutFlag = !state.checkOutFlag;
+    },
+    // 现金结算
+    cashCheckOut (state) {
+        let checkOutList = [];
+        let checkOutNumber = [];
+        let total = 0;
+        for (let i = 0; i < state.shoppingCartList.length; i++) {
+            if (state.shoppingFlag[i] === true) {
+                checkOutList.push(state.shoppingCartList[i]);
+                checkOutNumber.push(state.shoppingNumber[i]);
+                total += (state.shoppingCartList[i].price * state.shoppingNumber[i]);
+            }
+        }
+        let newDate = new Date();
+        let year = newDate.getFullYear();
+        let month = newDate.getMonth() + 1;
+        let day = newDate.getDate();
+        let hour = newDate.getHours();
+        let minute = newDate.getMinutes();
+        let date = year + '-' + month + '-' + day + ' ' + hour + ':' + minute; 
+
+        let obj = new Object();
+        obj.date = date;
+        obj.total = total;
+        obj.shoppingList = checkOutList;
+        obj.shoppingNumber = checkOutNumber;
+
+        state.shoppingRecordList.push(obj);
+        state.checkOutFlag = false;
+    },
 
     // 商品操作部分
     // 更改商品名称
@@ -78,5 +119,36 @@ export default {
     // 删除商品
     deleteShopping (state, obj) {
         state.shoppingList.splice(obj.index, 1);
+    },
+
+    // 消息通知部分
+    // 设置保质期检查期限
+    setDate (state, day) {
+        state.dateLimit = day;
+    },
+    // 设置库存检查数量
+    setNumber (state, number) {
+        state.numberLimit = number;
+    },
+    // 检查商品
+    checkShopping (state) {
+        let newDate = new Date().getTime();
+        for (let i = 0; i < state.shoppingList.length; i++) {
+            let date = new Date(state.shoppingList[i].date).getTime();
+            let dayNumber = Math.floor((date - newDate) / 1000 / 60 / 60 / 24);
+            if (dayNumber < state.dateLimit) {
+                let obj = new Object();
+                obj.name = 'date';
+                obj.date = dayNumber;
+                obj.shopping = state.shoppingList[i];
+                state.messageList.unshift(obj);
+            }
+            if (state.shoppingList[i].number < state.numberLimit) {
+                let obj = new Object();
+                obj.name = 'number';
+                obj.shopping = state.shoppingList[i];
+                state.messageList.unshift(obj);
+            }
+        }
     },
 }

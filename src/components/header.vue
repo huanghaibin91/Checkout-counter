@@ -2,37 +2,46 @@
     <header>
         <div class="header-box">
             <div class="sign-box">
-                <span>未登陆!</span>
-                <a href="#" @click="changeSignInFlag">请登录</a>
-                <!--<div class="sign-out">
-                    <button>切换账户</button>
-                    <button>退出</button>
-                </div>-->
-                <!--<div class="head">
-                    <img src="../assets/image/head.png" /><span>小张</span>
-                </div>-->
+                <div v-if="landingStatus === 'not-landed'">
+                    <span>未登陆!</span>
+                    <a href="javascript:;" @click="changeSignInFlag">请登录</a>
+                </div>
+                <div v-else-if="landingStatus === 'has-logged'">
+                    <span>您好</span>
+                    <span>{{ accountName }}</span>
+                    <a href="javascript:;" @click="signOut">退出</a>
+                    <a href="javascript:;" @click="changeSignInFlag">切换账号</a>
+                </div>
                 <transition name="sign-in-fade">
                     <form id="sign-in" v-if="signInFlag">
                         <span class="triangle-in"></span>
                         <span class="triangle-out"></span>
                         <div>
-                            <label for="account">账号</label><input id="account" type="text" placeholder="请输入账号" />
+                            <label for="account">账号</label><input id="account" v-model="account" type="text" placeholder="请输入账号" />
                         </div>
                         <div>
                             <label for="password">密码</label><input id="password" type="password" placeholder="请输入密码" />
                         </div>
                         <div>
-                            <button @click="changeSignInFlag">登&nbsp;录</button>
+                            <button @click="signIn">登&nbsp;录</button>
                         </div>
                     </form>
                 </transition>
             </div>
             <div class="nav">
                 <ul>
-                    <li><a href="#">在售商品</a></li>
-                    <li><a href="#">商品操作</a></li>
-                    <li><a href="#">收银操作</a></li>
-                    <li><a href="#">消息通知<span>2</span></a></li>
+                    <li>
+                        <router-link to="/">在售商品</router-link>
+                    </li>
+                    <li>
+                        <router-link to="/commodityOperations">商品操作</router-link>
+                    </li>
+                    <li>
+                        <router-link to="/shoppingRecord">收银操作</router-link>
+                    </li>
+                    <li>
+                        <router-link to="/messageNotification">消息通知<span>2</span></router-link>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -43,12 +52,27 @@
     export default {
         data () {
             return {
+                landingStatus: 'not-landed',
                 signInFlag: false,
+                account: '',
+                accountName: '',
             }
         },
         methods: {
             changeSignInFlag () {
                 this.signInFlag = !this.signInFlag;
+            },
+            signIn () {
+                if (this.account !== '') {
+                    this.accountName = this.account;
+                    this.signInFlag = !this.signInFlag;
+                    this.landingStatus = 'has-logged';
+                    this.account = '';
+                    this.$store.commit('checkShopping');
+                }
+            },
+            signOut () {
+                this.landingStatus = 'not-landed';
             }
         }
     }
@@ -92,7 +116,7 @@
                     padding: 20px 20px;
                     position: absolute;
                     top: 40px;
-                    z-index: 3;
+                    z-index: 99;
                     background: white;
                     >span {
                         width: 0px;
@@ -135,6 +159,7 @@
                             height: 30px;
                             background: white;
                             border: 1px solid #ededee;
+                            border-radius: 5px;
                             &:hover {
                                 background: #2F79BA;
                                 color: white;

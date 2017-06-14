@@ -3,15 +3,15 @@
         <p>{{ getShopping.coding }}</p>
         <p>
             <input :value="getShopping.name" :class="{ isName: !nameFlag }" :disabled="nameFlag" @blur="trueNameFlag" />
-            <a href="#" @click="falseNameFlag"></a>
+            <a href="javascript:;" @click="falseNameFlag"></a>
         </p>
         <p>
             <input :value="getShopping.price" :class="{ isPrice: !priceFlag }" :disabled="priceFlag" @blur="truePriceFlag" />
-            <a href="#" @click="falsePriceFlag"></a>
+            <a href="javascript:;" @click="falsePriceFlag"></a>
         </p>
         <p>
             <input :value="getShopping.number" :class="{ isNumber: !numberFlag }" :disabled="numberFlag" @blur="trueNumberFlag" />
-            <a href="#" @click="falseNumberFlag"></a>
+            <a href="javascript:;" @click="falseNumberFlag"></a>
         </p>
         <p>{{ getShopping.date }}</p>
         <p>
@@ -33,8 +33,12 @@
         },
         methods: {
             // 切换input的可否编辑,并修改商品属性
-            falseNameFlag () {
-                this.nameFlag = false;
+            falseNameFlag (e) {
+                // this.nameFlag = false;
+                this.nameFlag = !this.nameFlag;
+                console.log(e.target.previousElementSibling);
+                e.target.previousElementSibling.focus();
+                // e.target.previousElementSibling.select();
             },
             trueNameFlag (e) {
                 this.nameFlag = true;
@@ -44,7 +48,7 @@
                 this.$store.commit('changeShoppingName', obj);
             },
             falsePriceFlag () {
-                this.priceFlag = false;
+                this.priceFlag = !this.priceFlag;
             },
             truePriceFlag (e) {
                 this.priceFlag = true;
@@ -54,7 +58,7 @@
                 this.$store.commit('changeShoppingPrice', obj);
             },
             falseNumberFlag () {
-                this.numberFlag = false;
+                this.numberFlag = !this.numberFlag;
             },
             trueNumberFlag (e) {
                 this.numberFlag = true;

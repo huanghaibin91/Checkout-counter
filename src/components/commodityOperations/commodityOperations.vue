@@ -50,14 +50,22 @@
         margin: 31px auto;
         >div.storage-box {
             height: 50px;
-            margin-right: 100px;
-            text-align: right;
-            line-height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            // background: #f2f2f2;
+            input {
+                width: 300px;
+                height: 20px;
+                padding: 5px;
+                margin-left: 100px;
+            }
             button {
                 border: 1px solid #ededee;
                 background: white;
                 border-radius: 5px;
                 height: 30px;
+                margin-right: 100px;
                 &:hover {
                     background: #2F79BA;
                     color: white;
@@ -110,7 +118,7 @@
                         width: 20px;
                         height: 20px;
                         margin-left: 5px;
-                        background: url("../assets/image/pen.png") no-repeat center;
+                        background: url("../../assets/image/pen.png") no-repeat center;
                         background-size: cover;
                     }
                     button {
@@ -118,9 +126,9 @@
                         height: 35px;
                         border: none;
                         background: white;
-                        background: url("../assets/image/trash.png") no-repeat center;
+                        background: url("../../assets/image/trash.png") no-repeat center;
                         &:hover {
-                            background: url("../assets/image/trash2.png") no-repeat center;
+                            background: url("../../assets/image/trash2.png") no-repeat center;
                         }
                     }
                 }
@@ -134,11 +142,15 @@
                         width: 310px;
                     }
                 }
-                p:nth-child(3), p:nth-child(4), p:nth-child(5), p:nth-child(6) {
+                p:nth-child(3), p:nth-child(4) {
                     width: 125px;
                     input {
                         width: 80px;
                     }
+                }
+                p:nth-child(5), p:nth-child(6) {
+                    width: 125px;
+                    justify-content: center;
                 }
             }
         }

@@ -1,38 +1,26 @@
 <template>
   <div id="app">
     <oheader></oheader>
-    <shoppingList></shoppingList>
-    <!--<storage></storage>-->
-    <!--<shoppingCart></shoppingCart>-->
-    <!--<commodityOperations></commodityOperations>-->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 
   import oheader from './components/header.vue'
-  import shoppingList from './components/shoppingList.vue'
-  import storage from './components/storage.vue'
-  import shoppingCart from './components/shoppingCart.vue'
-  import shoppingRecord from './components/shoppingRecord.vue'
-  import commodityOperations from './components/commodityOperations.vue'
-  import calender from './components/calendar.vue'
 
   export default {
     name: 'app',
     components: {
       oheader,
-      shoppingList,
-      storage,
-      shoppingCart,
-      shoppingRecord,
-      calender,
-      commodityOperations,
     },
   }
 </script>
 
 <style lang="scss"> 
+  html {
+    overflow-y: scroll;
+  }
   button {
     cursor: pointer;
   }

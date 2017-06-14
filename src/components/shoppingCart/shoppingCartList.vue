@@ -68,7 +68,7 @@
             // 商品图片
             imgUrl (shopping) {
                 // webpack中一切皆模块，都可以用require引入
-                return require('../assets/shopping-images/' + shopping.coding + '.jpg');
+                return require('../../assets/shopping-images/' + shopping.coding + '.jpg');
             },
             // 更改商品选中状态
             changeShoppingFlag (index) {
@@ -122,6 +122,7 @@
             deleteShopping (index) {
                 this.$store.commit('deleteShoppingCart', index);
                 this.isCheckAll();
+                console.log(this.$store.state.shoppingCartList.length);
             },
             // 获取input里的文字
             selected (e) {

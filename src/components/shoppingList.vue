@@ -2,19 +2,25 @@
     <div class="shopping-list">
         <div id="search" class="search">
             <div class="search-input">
-                <input type="text" placeholder="输入商品名称或编码查询" />
+                <input type="text" v-model="searchText" placeholder="输入商品名称或编码查询" />
             </div>
             <div class="shopping-btn">
-                <button><img src="../assets/image/shopping-cart.png" /><span>购物车</span><span v-if="shoppingCartListNumberFlag">{{ shoppingCartListNumber }}</span></button>
+                <router-link tag="button" to="/shoppingCart">
+                    <img src="../assets/image/shopping-cart.png" />
+                    <span>购物车</span>
+                    <span v-if="this.$store.state.shoppingCartListNumberFlag">{{ shoppingCartListNumber }}</span>
+                </router-link>
             </div>
         </div>
-        <div class="quick-search">
-            <button>全部品类</button>
-            <button>休闲零食</button>
-            <button>酒水饮料</button>
-            <button>粮油副食</button>
-            <button>生鲜水果</button>
-            <button>日常洗护</button>
+        <div class="quick-search-box">
+            <div class="quick-search" @click="quickSearch">
+                <button>全部品类</button>
+                <button>休闲零食</button>
+                <button>酒水饮料</button>
+                <button>粮油副食</button>
+                <button>生鲜水果</button>
+                <button>日常洗护</button>
+            </div>
         </div>
         <div class="shoppingList-screen">
             <div v-for="shopping in shoppingList" title="加入购物车">
@@ -31,38 +37,41 @@
 </template>
 
 <script>
-    // 页面滚动
-    window.onscroll = function () {
-        let search = document.querySelector('#search');
-        let top = document.body.scrollTop || document.documentElement.scrollTop;
-        if (top > 200) {
-            search.className = 'search isFixed';
-        } else {
-            search.className = 'search';
-        }
-    }
 
-    import { mapGetters } from 'vuex'
+    import { mapState, mapGetters } from 'vuex'
 
     export default {
         name:　'shoppingList',
         data () {
             return {
-                shoppingCartListNumberFlag: true,
+                searchText: '',
+                allShoppingList: this.$store.state.shoppingList,
                 shoppingList: this.$store.state.shoppingList,
             }
         },
         watch: {
             // 购物车按钮显示购物车中商品数量
             shoppingCartListNumber: function (val) {
+                // console.log(val);
                 if (val === 0) {
-                    return this.shoppingCartListNumberFlag = false;
+                    this.$store.commit('falseShoppingCartListNumberFlag');
                 } else {
-                    return this.shoppingCartListNumberFlag = true;
+                    this.$store.commit('trueShoppingCartListNumberFlag');
                 }
+            },
+            // 搜索商品
+            searchText: function (val) {
+                this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                   if (shopping.name.includes(val) || shopping.coding.includes(val)) {
+                       return shopping;
+                   }  
+                });
             },
         },
         computed: {
+            ...mapState([
+                'shoppingCartList',
+            ]),
             ...mapGetters([
                 'shoppingCartListNumber',
             ]),
@@ -75,7 +84,36 @@
             },
             // 添加商品至购物车列表
             addShoppingCart (shopping) {
-                this.$store.commit('addShoppingCart', shopping);
+                if (!this.shoppingCartList.includes(shopping)) {
+                    this.$store.commit('addShoppingCart', shopping);
+                }
+            },
+            // 快速搜索
+            quickSearch (e) {
+                let target = e.target;
+                if (target.textContent === '全部品类') {
+                    this.shoppingList = this.allShoppingList;
+                } else if (target.textContent === '休闲零食') {
+                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                        return shopping.category === '休闲零食';
+                    });
+                } else if (target.textContent === '酒水饮料') {
+                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                        return shopping.category === '酒水饮料';
+                    });
+                } else if (target.textContent === '粮油副食') {
+                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                        return shopping.category === '粮油副食';
+                    });
+                } else if (target.textContent === '生鲜水果') {
+                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                        return shopping.category === '生鲜水果';
+                    });
+                } else if (target.textContent === '日常洗护') {
+                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                        return shopping.category === '日常洗护';
+                    });
+                }
             },
         }
     }
@@ -85,17 +123,14 @@
     .shopping-list {
         width: 100%;
         margin: 31px auto;
-        >div.isFixed {
-            background: white;
-            box-shadow: 0px 2px 2px #ccc;
-            position: fixed;
-            top: 31px;
-            left: 0px;
-            z-index: 99;
-        }
         >div.search {
             height: 60px;
             width: 100%;
+            background: white;
+            position: fixed;
+            top: 31px;
+            left: 0px;
+            z-index: 9;
             display: flex;
             justify-content: center;
             .search-input, .shopping-btn, .shopping-btn button {
@@ -140,24 +175,34 @@
                 }
             }
         }
-        >div.quick-search {
+        >div.quick-search-box {
+            width: 100%;
             height: 30px;
-            padding-left: 253px;
-            button {
-                margin-right: 10px;
-                padding: 2px;
-                background: white;
-                border: none;
-                font-size: 14px;
-                font-weight: bold;
-                &:hover {
-                    background: #444;
-                    color: white;
+            background: white;
+            position: fixed;
+            top: 91px;
+            z-index: 9;
+            box-shadow: 0px 2px 2px #ccc;
+            >div.quick-search {
+                height: 30px;
+                padding-left: 253px;
+                button {
+                    margin-right: 10px;
+                    padding: 2px;
+                    background: white;
+                    border: none;
+                    font-size: 14px;
+                    font-weight: bold;
+                    &:hover {
+                        background: #444;
+                        color: white;
+                    }
                 }
             }
         }
         >div.shoppingList-screen {
-            width: 100%;           
+            width: 100%;  
+            margin-top: 130px;         
             display: flex;
             flex-wrap: wrap;
             >div {

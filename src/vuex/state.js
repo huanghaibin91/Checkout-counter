@@ -1,4 +1,7 @@
 export default  {
+    // 登录账号
+    accout: '',
+
     // 商品列表
     shoppingList: [
         {name: '限购型黑猫', coding: '00000000', price: 9999, category: '生鲜水果',number: 1, date: '2017-7-31',},
@@ -33,20 +36,30 @@ export default  {
         {name: '潘婷洗发水 丝质顺滑洗发露750ml', coding: '00000029', price: 39.8, category: '日常洗护',number: 5, date: '2019-2-1',},
         {name: '佳沛新西兰阳光金奇异果原箱22-25个134-175g/个金果', coding: '00000030', price: 168.8, category: '生鲜水果',number: 5, date: '2017-9-19',},
     ],
+    // 购物车按钮数字
+    shoppingCartListNumberFlag: false,
+
     // 购物车中商品列表
-    shoppingCartList: [
-        {name: '澳洲嫩肩牛排200g(2片)原切牛排', coding: '00000016', price: 29.9, category: '生鲜水果',number: 6, date: '2018-3-14',},
-        {name: '52度剑南春浓香型白酒500ml*6瓶', coding: '00000017', price: 2148, category: '酒水饮料',number: 2, date: '2027-7-18',},
-    ],
+    shoppingCartList: [],
+    // 购物车中每种商品的数量
+    shoppingNumber: [],
     // 购物车中商品选中状态
     // 全选状态
     checkAllFlag: true,
     // 各个商品选中状态
-    shoppingFlag : [
-        true, true,
-    ],
-    // 购物车中每种商品的数量
-    shoppingNumber: [
-        1, 1,
-    ]
+    shoppingFlag : [],
+
+    // 结算界面
+    checkOutFlag: false,
+
+    // 收银记录列表
+    shoppingRecordList: [],
+
+    // 消息列表
+    messageList: [],
+    // 消息设置
+    // 保质期
+    dateLimit: 0,
+    // 库存
+    numberLimit: 0,
 }
