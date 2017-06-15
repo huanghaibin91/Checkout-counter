@@ -1,8 +1,8 @@
 <template>
     <div class="commodity-operations">
         <div class="storage-box">
-            <input placeholder="输入商品名称或编码查询" />
-            <button>商品入库</button>
+            <input v-model="searchText" placeholder="输入商品名称或编码查询" />
+            <button @click="changeStorageFlag">商品入库</button>
         </div>
         <div class="shoppinglist-box">
             <div class="title">
@@ -13,33 +13,46 @@
                 <p>商品保质期</p>
                 <p>删除商品</p>
             </div>
-            <commodityOperationsList v-for="(shopping, index) in shoppingList" :getShopping="shopping" :getIndex="index"  :key="shopping.coding"></commodityOperationsList>
+            <commodityOperationsList v-for="(shopping, index) in shoppingList" :getShopping="shopping" :key="shopping.coding"></commodityOperationsList>
         </div>
+        <storage :getStorageFlag="storageFlag" @emitStorageFlag="changeStorageFlag"></storage>
     </div>
 </template>
 
 <script>
 
     import commodityOperationsList from './commodityOperationsList.vue'
+    import storage from './storage.vue'
     import { mapState } from 'vuex'
 
     export default {
         name: 'commodityOperations',
-        components: {
-            commodityOperationsList,
-        },
         data () {
             return {
-                
+                searchText: '',
+                allShoppingList: this.$store.state.shoppingList,
+                shoppingList: this.$store.state.shoppingList,
+                storageFlag: false,
             }
         },
-        computed: {
-            ...mapState([
-                'shoppingList',
-            ]),
+        components: {
+            commodityOperationsList,
+            storage,
+        },
+        watch: {
+            // 搜索商品
+            searchText: function (val) {
+                this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                   if (shopping.name.includes(val) || shopping.coding.includes(val)) {
+                       return shopping;
+                   }  
+                });
+            },
         },
         methods: {
-
+            changeStorageFlag () {
+                this.storageFlag = !this.storageFlag;
+            },
         }
     }
 </script>
@@ -50,15 +63,16 @@
         margin: 31px auto;
         >div.storage-box {
             height: 50px;
+            font-size: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            // background: #f2f2f2;
             input {
                 width: 300px;
                 height: 20px;
-                padding: 5px;
+                padding: 3px 10px;
                 margin-left: 100px;
+                border: 1px solid #ededee;
             }
             button {
                 border: 1px solid #ededee;
@@ -100,13 +114,13 @@
                         background: white;
                     }
                     input.isName {
-                        background: #ccc;
+                        background: #ffd460;
                     }
                     input.isPrice {
-                        background: #ccc;
+                        background: #ffd460;
                     }
                     input.isNumber {
-                        background: #ccc;
+                        background: #ffd460;
                     }
                     &:hover {
                         a {

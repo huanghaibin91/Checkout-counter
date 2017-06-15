@@ -40,7 +40,7 @@
                         <router-link to="/shoppingRecord">收银操作</router-link>
                     </li>
                     <li>
-                        <router-link to="/messageNotification">消息通知<span>2</span></router-link>
+                        <router-link to="/messageNotification">消息通知<span v-if="messageNumberFlag">{{ messageListNumber }}</span></router-link>
                     </li>
                 </ul>
             </div>
@@ -49,28 +49,43 @@
 </template>
 
 <script>
+
+    import { mapState, mapGetters } from 'vuex'
+
     export default {
         data () {
             return {
                 landingStatus: 'not-landed',
                 signInFlag: false,
                 account: '',
-                accountName: '',
             }
         },
+        computed: {
+            ...mapState([
+                'accountName',
+                'messageNumberFlag',
+            ]),
+            ...mapGetters([
+                'messageListNumber'
+            ]),
+        },
         methods: {
+            // 隐藏显示登录框
             changeSignInFlag () {
                 this.signInFlag = !this.signInFlag;
             },
+            // 登录
             signIn () {
                 if (this.account !== '') {
-                    this.accountName = this.account;
+                    this.$store.commit('setAccountName', this.account);
                     this.signInFlag = !this.signInFlag;
                     this.landingStatus = 'has-logged';
                     this.account = '';
                     this.$store.commit('checkShopping');
+                    this.$store.commit('checkMessageList');
                 }
             },
+            // 退出登录
             signOut () {
                 this.landingStatus = 'not-landed';
             }

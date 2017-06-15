@@ -1,6 +1,8 @@
 export default  {
     // 登录账号
-    accout: '',
+    accoutName: '',
+    // 消息提醒
+    messageNumberFlag: false,
 
     // 商品列表
     shoppingList: [
@@ -39,6 +41,8 @@ export default  {
     // 购物车按钮数字
     shoppingCartListNumberFlag: false,
 
+    // 购物车显示
+    shoppingCartFlag: 'noShopping',
     // 购物车中商品列表
     shoppingCartList: [],
     // 购物车中每种商品的数量
@@ -59,7 +63,7 @@ export default  {
     messageList: [],
     // 消息设置
     // 保质期
-    dateLimit: 0,
+    dateLimit: 30,
     // 库存
-    numberLimit: 0,
+    numberLimit: 3,
 }

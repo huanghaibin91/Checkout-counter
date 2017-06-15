@@ -22,5 +22,9 @@ export default {
             }
         }
         return total.toFixed(1);
-    }
+    },
+    // 消息通知数量
+    messageListNumber (state) {
+        return state.messageList.length;
+    },
 }

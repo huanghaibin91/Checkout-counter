@@ -122,7 +122,7 @@
             deleteShopping (index) {
                 this.$store.commit('deleteShoppingCart', index);
                 this.isCheckAll();
-                console.log(this.$store.state.shoppingCartList.length);
+                this.$store.commit('checkShoppingCartList');
             },
             // 获取input里的文字
             selected (e) {

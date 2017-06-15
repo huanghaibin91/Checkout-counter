@@ -15,7 +15,7 @@
         </p>
         <p>{{ getShopping.date }}</p>
         <p>
-            <button @click="deleteShopping(getIndex)"></button>
+            <button @click="deleteShopping(getShopping)"></button>
         </p>
     </div>
 </template>
@@ -23,7 +23,7 @@
 <script>
     export default {
         name: "commodityOperationsList",
-        props: ['getShopping', 'getIndex'],
+        props: ['getShopping'],
         data () {
             return {
                 nameFlag: true,
@@ -36,14 +36,13 @@
             falseNameFlag (e) {
                 // this.nameFlag = false;
                 this.nameFlag = !this.nameFlag;
-                console.log(e.target.previousElementSibling);
                 e.target.previousElementSibling.focus();
                 // e.target.previousElementSibling.select();
             },
             trueNameFlag (e) {
                 this.nameFlag = true;
                 let obj = new Object();
-                obj.index = this.getIndex;
+                obj.shopping = this.getShopping;
                 obj.message = e.target.value;
                 this.$store.commit('changeShoppingName', obj);
             },
@@ -53,7 +52,7 @@
             truePriceFlag (e) {
                 this.priceFlag = true;
                 let obj = new Object();
-                obj.index = this.getIndex;
+                obj.shopping = this.getShopping;
                 obj.message = e.target.value;
                 this.$store.commit('changeShoppingPrice', obj);
             },
@@ -63,18 +62,18 @@
             trueNumberFlag (e) {
                 this.numberFlag = true;
                 let obj = new Object();
-                obj.index = this.getIndex;
+                obj.shopping = this.getShopping;
                 obj.message = e.target.value;
                 this.$store.commit('changeShoppingNumber', obj);
             },
             // 删除商品
-            deleteShopping (index) {
-                this.$store.commit('deleteShopping', index);
+            deleteShopping (shopping) {
+                this.$store.commit('deleteShopping', shopping);
             }
         },
     }
 </script>
 
-<style>
+<style lang="scss">
 
 </style>

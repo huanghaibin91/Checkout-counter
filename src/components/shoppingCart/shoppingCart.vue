@@ -4,7 +4,10 @@
             <p>购物车</p>
             <router-link to="/">返回商品列表</router-link>
         </div>
-        <table cellspacing="0">
+        <p v-if="shoppingCartFlag === 'noShopping'">
+            购物车中没有任何商品，请到<router-link to="/">商品列表</router-link>中添加！
+        </p>
+        <table cellspacing="0" v-else-if="shoppingCartFlag === 'hasShopping'">
             <thead>
                 <tr>
                     <td><input v-model="checkAllFlag" @click="changeCheckAll" id="check-all"  type="checkbox" /><label for="check-all">&nbsp;全选</label></td>
@@ -37,7 +40,7 @@
                         <button @click="changeCashCheckOutFlag">现金支付</button>
                         <transition name="cash-fade">
                             <div v-if="cashCheckOutFlag">
-                                <label><span>实收</span><input type="text" @click="selected" v-model="cash"  placeholder="输入实收金额"></label>
+                                <label><span>实收</span><input autofocus type="text" @click="selected" v-model="cash"  placeholder="输入实收金额"></label>
                                 <p><span>应收</span><span>{{ shoppingPriceTotal }}</span></p>
                                 <p><span>找零</span><span>{{ smallChange }}</span></p>
                                 <button @click="cashCheckOut">确认支付</button>
@@ -78,14 +81,17 @@
         },
         computed: {
             ...mapState([
+                'shoppingCartFlag',
                'shoppingCartList',
                'checkAllFlag',
                'checkOutFlag',
             ]),
             ...mapGetters([
+                'shoppingCartListNumber',
                 'shoppingNumberTotal',
                 'shoppingPriceTotal',
             ]),
+            // 找零
             smallChange () {
                 return this.cash - this.shoppingPriceTotal;
             },
@@ -115,6 +121,7 @@
             // 现金支付
             cashCheckOut () {
                 this.$store.commit('cashCheckOut');
+                this.$store.commit('checkShoppingCartList');
             }
         },
     }
@@ -143,6 +150,15 @@
                 line-height: 32px;
                 padding-left: 32px;
                 background: url('../../assets/image/return.png') no-repeat left center;
+            }
+        }
+        >p {
+            text-align: center;
+            a {
+                color: blue;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
         table {

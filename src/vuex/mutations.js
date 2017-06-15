@@ -2,6 +2,11 @@
 // import Vue from 'vue' 
 
 export default {
+    // 登录部分
+    setAccountName (state, name) {
+        state.accountName = name;
+    },
+
     // 商品入库部分
     // 添加新商品
     addShopping (state, newShopping) {
@@ -29,6 +34,16 @@ export default {
     },
 
     // 购物车部分
+    // 检查购物车中商品数量
+    checkShoppingCartList (state) {
+        if (state.shoppingCartList.length === 0) {
+            state.shoppingCartListNumberFlag = false;
+            state.shoppingCartFlag = 'noShopping';
+        } else {
+            state.shoppingCartListNumberFlag = true;
+            state.shoppingCartFlag = 'hasShopping';
+        }
+    },
     // 更改商品选中状态
     changeShoppingFlag (state, index) {
         // 用索引直接更改数组值，vue不会重新渲染
@@ -83,8 +98,12 @@ export default {
                 checkOutList.push(state.shoppingCartList[i]);
                 checkOutNumber.push(state.shoppingNumber[i]);
                 total += (state.shoppingCartList[i].price * state.shoppingNumber[i]);
+                state.shoppingCartList.splice(i, 1);
+                state.shoppingFlag.splice(i, 1);
+                state.shoppingNumber.splice(i, 1);
             }
         }
+
         let newDate = new Date();
         let year = newDate.getFullYear();
         let month = newDate.getMonth() + 1;
@@ -106,22 +125,54 @@ export default {
     // 商品操作部分
     // 更改商品名称
     changeShoppingName (state, obj) {
-        state.shoppingList[obj.index].name = obj.message;
+        let index = null;
+        for (let i = 0; i < state.shoppingList.length; i++) {
+            if (state.shoppingList[i].coding === obj.shopping.coding) {
+                index = i;
+            }
+        }
+        state.shoppingList[index].name = obj.message;
     },
     // 更改商品价格
     changeShoppingPrice (state, obj) {
-        state.shoppingList[obj.index].price = obj.message;
+        let index = null;
+        for (let i = 0; i < state.shoppingList.length; i++) {
+            if (state.shoppingList[i].coding === obj.shopping.coding) {
+                index = i;
+            }
+        }
+        state.shoppingList[index].price = obj.message;
     },
     // 更改商品数量
     changeShoppingNumber (state, obj) {
-        state.shoppingList[obj.index].number = obj.message;
+        let index = null;
+        for (let i = 0; i < state.shoppingList.length; i++) {
+            if (state.shoppingList[i].coding === obj.shopping.coding) {
+                index = i;
+            }
+        }
+        state.shoppingList[index].number = obj.message;
     },  
     // 删除商品
     deleteShopping (state, obj) {
-        state.shoppingList.splice(obj.index, 1);
+        let index = null;
+        for (let i = 0; i < state.shoppingList.length; i++) {
+            if (state.shoppingList[i].coding === obj.shopping.coding) {
+                index = i;
+            }
+        }
+        state.shoppingList.splice(index, 1);
     },
 
     // 消息通知部分
+    // 检查消息列表
+    checkMessageList (state) {
+        if (state.messageList.length === 0) {
+            state.messageNumberFlag = false;
+        } else {
+            state.messageNumberFlag = true;
+        }
+    },
     // 设置保质期检查期限
     setDate (state, day) {
         state.dateLimit = day;

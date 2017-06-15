@@ -8,13 +8,13 @@
                 <router-link tag="button" to="/shoppingCart">
                     <img src="../assets/image/shopping-cart.png" />
                     <span>购物车</span>
-                    <span v-if="this.$store.state.shoppingCartListNumberFlag">{{ shoppingCartListNumber }}</span>
+                    <span v-if="shoppingCartListNumberFlag">{{ shoppingCartListNumber }}</span>
                 </router-link>
             </div>
         </div>
         <div class="quick-search-box">
             <div class="quick-search" @click="quickSearch">
-                <button>全部品类</button>
+                <button class="active">全部品类</button>
                 <button>休闲零食</button>
                 <button>酒水饮料</button>
                 <button>粮油副食</button>
@@ -33,6 +33,7 @@
                 <div @click="addShoppingCart(shopping)"></div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -50,15 +51,6 @@
             }
         },
         watch: {
-            // 购物车按钮显示购物车中商品数量
-            shoppingCartListNumber: function (val) {
-                // console.log(val);
-                if (val === 0) {
-                    this.$store.commit('falseShoppingCartListNumberFlag');
-                } else {
-                    this.$store.commit('trueShoppingCartListNumberFlag');
-                }
-            },
             // 搜索商品
             searchText: function (val) {
                 this.shoppingList = this.allShoppingList.filter(function (shopping) {
@@ -70,6 +62,7 @@
         },
         computed: {
             ...mapState([
+                'shoppingCartListNumberFlag',
                 'shoppingCartList',
             ]),
             ...mapGetters([
@@ -86,33 +79,41 @@
             addShoppingCart (shopping) {
                 if (!this.shoppingCartList.includes(shopping)) {
                     this.$store.commit('addShoppingCart', shopping);
+                    this.$store.commit('checkShoppingCartList');
                 }
             },
             // 快速搜索
             quickSearch (e) {
-                let target = e.target;
-                if (target.textContent === '全部品类') {
-                    this.shoppingList = this.allShoppingList;
-                } else if (target.textContent === '休闲零食') {
-                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
-                        return shopping.category === '休闲零食';
-                    });
-                } else if (target.textContent === '酒水饮料') {
-                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
-                        return shopping.category === '酒水饮料';
-                    });
-                } else if (target.textContent === '粮油副食') {
-                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
-                        return shopping.category === '粮油副食';
-                    });
-                } else if (target.textContent === '生鲜水果') {
-                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
-                        return shopping.category === '生鲜水果';
-                    });
-                } else if (target.textContent === '日常洗护') {
-                    this.shoppingList = this.allShoppingList.filter(function (shopping) {
-                        return shopping.category === '日常洗护';
-                    });
+                var quickSearchBtn = document.querySelector('.quick-search').querySelectorAll('button');
+                var target = e.target;
+                if (target.tagName === 'BUTTON') {
+                    for (let i = 0; i < quickSearchBtn.length; i++) {
+                        quickSearchBtn[i].className = '';
+                    }
+                    target.className = 'active';
+                    if (target.textContent === '全部品类') {
+                        this.shoppingList = this.allShoppingList;
+                    } else if (target.textContent === '休闲零食') {
+                        this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                            return shopping.category === '休闲零食';
+                        });
+                    } else if (target.textContent === '酒水饮料') {
+                        this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                            return shopping.category === '酒水饮料';
+                        });
+                    } else if (target.textContent === '粮油副食') {
+                        this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                            return shopping.category === '粮油副食';
+                        });
+                    } else if (target.textContent === '生鲜水果') {
+                        this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                            return shopping.category === '生鲜水果';
+                        });
+                    } else if (target.textContent === '日常洗护') {
+                        this.shoppingList = this.allShoppingList.filter(function (shopping) {
+                            return shopping.category === '日常洗护';
+                        });
+                    }
                 }
             },
         }
@@ -186,6 +187,10 @@
             >div.quick-search {
                 height: 30px;
                 padding-left: 253px;
+                button.active {
+                    background: #444;
+                    color: white;
+                }
                 button {
                     margin-right: 10px;
                     padding: 2px;
