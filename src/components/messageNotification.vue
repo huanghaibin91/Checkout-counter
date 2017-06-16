@@ -20,23 +20,32 @@
                 </transition>
             </div>
         </div>
-        <div v-for="message in this.$store.state.messageList">
-            <p v-if="message.name === 'date'">商品编码{{ message.shopping.coding }}，名称{{ message.shopping.name }}保质期至{{ message.shopping.date }}，还剩{{ message.date }}天,请尽快销售！</p>
-            <p v-else-if="message.name === 'number'">商品编码{{ message.shopping.coding }}，名称{{ message.shopping.name }}库存仅剩{{ message.shopping.number}}份，请尽快补充！</p>
-            <button>删除消息</button>
+        <p v-if="messageFlag === 'noMessage'">没有消息通知！</p>
+        <div v-else-if="messageFlag === 'hasMessage'" class="message-list" v-for="message in messageList">
+            <p v-if="message.name === 'date'">商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}保质期至<span>{{ message.shopping.date }}</span>，还剩<span>{{ message.date }}</span>天,请尽快销售！</p>
+            <p v-else-if="message.name === 'number'">商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}库存仅剩<span>{{ message.shopping.number}}</span>份，请尽快补充！</p>
         </div>
     </div>
 </template>
 
 <script>
+
+    import { mapState } from 'vuex'
+
     export default {
         name: 'messageNotification',
         data () {
             return {
+                messageFlag: 'hasMessage',
                 setFlag: false,
                 setDate: '',
                 setNumber: '',
             }
+        },
+        computed: {
+            ...mapState([
+                'messageList',
+            ]),
         },
         methods: {
             // 显示隐藏设置表单
@@ -71,6 +80,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #ededee;
             >p {
                 border-left: 5px solid aqua;
                 text-indent: 1em;
@@ -131,6 +141,22 @@
                 }
             }
             
+        }
+        p {
+            text-align: center;
+        }
+        div.message-list {
+            font-size: 14px;
+            color: #333;
+            margin: 20px;
+            padding: 5px 35px;
+            border-radius: 5px;
+            background: #eaffd0 url('../assets/image/list.png') no-repeat 5px center;
+            span {
+                padding: 0px 5px;
+                font-weight: bold;
+                color: #DE2634;
+            }
         }
     }
 </style>

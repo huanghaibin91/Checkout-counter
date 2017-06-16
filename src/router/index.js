@@ -7,7 +7,7 @@ Vue.use(Router)
 import shoppingList from '../components/shoppingList.vue'
 import commodityOperations from '../components/commodityOperations/commodityOperations.vue'
 import shoppingCart from '../components/shoppingCart/shoppingCart.vue'
-import shoppingRecord from '../components/shoppingRecord.vue'
+import shoppingRecord from '../components/shoppingRecord/shoppingRecord.vue'
 import messageNotification from '../components/messageNotification.vue'
 
 export default new Router({

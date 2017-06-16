@@ -93,7 +93,7 @@ export default {
         let checkOutList = [];
         let checkOutNumber = [];
         let total = 0;
-        for (let i = 0; i < state.shoppingCartList.length; i++) {
+        for (let i = state.shoppingCartList.length - 1; i >= 0; i--) {
             if (state.shoppingFlag[i] === true) {
                 checkOutList.push(state.shoppingCartList[i]);
                 checkOutNumber.push(state.shoppingNumber[i]);
@@ -118,7 +118,7 @@ export default {
         obj.shoppingList = checkOutList;
         obj.shoppingNumber = checkOutNumber;
 
-        state.shoppingRecordList.push(obj);
+        state.shoppingRecordList.unshift(obj);
         state.checkOutFlag = false;
     },
 
@@ -183,6 +183,7 @@ export default {
     },
     // 检查商品
     checkShopping (state) {
+        state.messageList = [];
         let newDate = new Date().getTime();
         for (let i = 0; i < state.shoppingList.length; i++) {
             let date = new Date(state.shoppingList[i].date).getTime();
