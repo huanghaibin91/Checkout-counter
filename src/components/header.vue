@@ -8,7 +8,7 @@
                 </div>
                 <div v-else-if="landingStatus === 'has-logged'">
                     <span>您好</span>
-                    <span>{{ accountName }}</span>
+                    <span>{{ this.$store.state.accountName }}</span>
                     <a href="javascript:;" @click="signOut">退出</a>
                     <a href="javascript:;" @click="changeSignInFlag">切换账号</a>
                 </div>
@@ -62,7 +62,6 @@
         },
         computed: {
             ...mapState([
-                'accountName',
                 'messageNumberFlag',
             ]),
             ...mapGetters([

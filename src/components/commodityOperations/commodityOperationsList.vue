@@ -34,10 +34,7 @@
         methods: {
             // 切换input的可否编辑,并修改商品属性
             falseNameFlag (e) {
-                // this.nameFlag = false;
                 this.nameFlag = !this.nameFlag;
-                e.target.previousElementSibling.focus();
-                // e.target.previousElementSibling.select();
             },
             trueNameFlag (e) {
                 this.nameFlag = true;
@@ -75,5 +72,6 @@
 </script>
 
 <style lang="scss">
-
+    
 </style>
+            

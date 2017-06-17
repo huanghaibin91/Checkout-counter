@@ -70,9 +70,11 @@
             input {
                 width: 300px;
                 height: 20px;
-                padding: 3px 10px;
+                padding: 3px 30px;
                 margin-left: 100px;
                 border: 1px solid #ededee;
+                background: url("../../assets/image/search.png") no-repeat left center;
+                background-size: 24px;
             }
             button {
                 border: 1px solid #ededee;
@@ -91,7 +93,10 @@
                 height: 40px;
                 color: #999;
                 font-size: 14px;
-                background: #f2f2f2;
+                color: #333;
+                font-weight: bold;
+                border-top: 2px solid #ededee;                
+                border-bottom: 2px solid #ededee;
                 p {
                     justify-content: center;
                 }

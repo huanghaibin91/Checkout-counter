@@ -86,7 +86,15 @@ export default {
     // 结算部分
     // 结算框显示隐藏
     changeCheckOutFlag (state) {
-        state.checkOutFlag = !state.checkOutFlag;
+        let flag = false;
+        for (let i = 0; i < state.shoppingFlag.length; i++) {
+            if (state.shoppingFlag[i] === true) {
+                flag = true;
+            }
+        }
+        if (flag === true) {
+            state.checkOutFlag = !state.checkOutFlag;
+        }
     },
     // 现金结算
     cashCheckOut (state) {
