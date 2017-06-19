@@ -50,6 +50,7 @@
             },
         },
         methods: {
+            // 隐藏显示商品入库界面
             changeStorageFlag () {
                 this.storageFlag = !this.storageFlag;
             },

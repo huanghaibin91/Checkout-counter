@@ -49,6 +49,7 @@
             ...mapState([
                 'accountName',
             ]),
+            // 显示全部按钮
             fullHeightBtnFlag () {
                 if (this.getShoppingRecord.shoppingList.length > 3) {
                     return true;
