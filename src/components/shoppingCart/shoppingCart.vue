@@ -122,6 +122,9 @@
             cashCheckOut () {
                 this.$store.commit('cashCheckOut');
                 this.$store.commit('checkShoppingCartList');
+                this.$store.commit('checkShopping');
+                this.$store.commit('checkNewMessageList');
+                this.$store.commit('checkMessageList');
             }
         },
     }

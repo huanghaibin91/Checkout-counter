@@ -13,7 +13,7 @@
                     <a href="javascript:;" @click="changeSignInFlag">切换账号</a>
                 </div>
                 <transition name="sign-in-fade">
-                    <form id="sign-in" v-if="signInFlag">
+                    <div id="sign-in" v-if="signInFlag">
                         <span class="triangle-in"></span>
                         <span class="triangle-out"></span>
                         <div>
@@ -25,7 +25,7 @@
                         <div>
                             <button @click="signIn">登&nbsp;录</button>
                         </div>
-                    </form>
+                    </div>
                 </transition>
             </div>
             <div class="nav">
@@ -39,8 +39,8 @@
                     <li>
                         <router-link to="/shoppingRecord">收银操作</router-link>
                     </li>
-                    <li>
-                        <router-link to="/messageNotification">消息通知<span v-if="messageNumberFlag">{{ messageListNumber }}</span></router-link>
+                    <li @click="changeNewMessageNumberFlag">
+                        <router-link to="/messageNotification">消息通知<span v-if="newMessageNumberFlag">{{ newMessageListNumber }}</span></router-link>
                     </li>
                 </ul>
             </div>
@@ -62,10 +62,10 @@
         },
         computed: {
             ...mapState([
-                'messageNumberFlag',
+                'newMessageNumberFlag',
             ]),
             ...mapGetters([
-                'messageListNumber'
+                'newMessageListNumber'
             ]),
         },
         methods: {
@@ -81,13 +81,18 @@
                     this.landingStatus = 'has-logged';
                     this.account = '';
                     this.$store.commit('checkShopping');
+                    this.$store.commit('checkNewMessageList');
                     this.$store.commit('checkMessageList');
                 }
             },
             // 退出登录
             signOut () {
                 this.landingStatus = 'not-landed';
-            }
+            },
+            // 新消息隐藏
+            changeNewMessageNumberFlag () {
+                this.$store.commit('changeNewMessageNumberFlag');
+            },
         }
     }
 </script>

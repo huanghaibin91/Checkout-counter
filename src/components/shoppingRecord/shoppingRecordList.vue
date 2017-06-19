@@ -60,7 +60,6 @@
         methods: {
              // 表格全部显示或隐藏
             changeFullHeight () {
-                console.log(123);
                 this.fullHeightFlag = !this.fullHeightFlag;
             },
         }

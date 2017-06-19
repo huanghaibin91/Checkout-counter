@@ -48,20 +48,32 @@
             },
             truePriceFlag (e) {
                 this.priceFlag = true;
-                let obj = new Object();
-                obj.shopping = this.getShopping;
-                obj.message = e.target.value;
-                this.$store.commit('changeShoppingPrice', obj);
+                let price = e.target.value;
+                let reg = /^(\d+\.\d{1,1}|\d+)$/g;
+                if (reg.test(price)) {
+                    let obj = new Object();
+                    obj.shopping = this.getShopping;
+                    obj.message = price;
+                    this.$store.commit('changeShoppingPrice', obj);
+                } else {
+                    alert('商品价格是最多一位小数的数字');
+                }
             },
             falseNumberFlag () {
                 this.numberFlag = !this.numberFlag;
             },
             trueNumberFlag (e) {
                 this.numberFlag = true;
-                let obj = new Object();
-                obj.shopping = this.getShopping;
-                obj.message = e.target.value;
-                this.$store.commit('changeShoppingNumber', obj);
+                let number = e.target.value;
+                let reg = /^[1-9]\d*$/g;
+                if (reg.test(number)) {
+                    let obj = new Object();
+                    obj.shopping = this.getShopping;
+                    obj.message = number;
+                    this.$store.commit('changeShoppingNumber', obj);
+                } else {
+                    alert('商品数量为数字');
+                }
             },
             // 删除商品
             deleteShopping (shopping) {

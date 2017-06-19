@@ -106,12 +106,19 @@ export default {
                 checkOutList.push(state.shoppingCartList[i]);
                 checkOutNumber.push(state.shoppingNumber[i]);
                 total += (state.shoppingCartList[i].price * state.shoppingNumber[i]);
+                // 减掉结算的
+                for (let j = 0; j < state.shoppingList.length; j++) {
+                    if (state.shoppingList[j].coding === state.shoppingCartList[i].coding) {
+                        state.shoppingList[j].number = state.shoppingList[j].number - state.shoppingNumber[i];
+                    }
+                }
+                // 清除掉已经结算的商品
                 state.shoppingCartList.splice(i, 1);
                 state.shoppingFlag.splice(i, 1);
                 state.shoppingNumber.splice(i, 1);
             }
         }
-
+        // 生成收银记录
         let newDate = new Date();
         let year = newDate.getFullYear();
         let month = newDate.getMonth() + 1;
@@ -122,7 +129,7 @@ export default {
 
         let obj = new Object();
         obj.date = date;
-        obj.total = total;
+        obj.total = total.toFixed(1);
         obj.shoppingList = checkOutList;
         obj.shoppingNumber = checkOutNumber;
 
@@ -173,13 +180,25 @@ export default {
     },
 
     // 消息通知部分
-    // 检查消息列表
-    checkMessageList (state) {
-        if (state.messageList.length === 0) {
-            state.messageNumberFlag = false;
+    // 检查新消息列表
+    checkNewMessageList (state) {
+        if (state.newMessageList.length === 0) {
+            state.newMessageNumberFlag = false;
         } else {
-            state.messageNumberFlag = true;
+            state.newMessageNumberFlag = true;
         }
+    },
+    // 检查所有消息
+    checkMessageList (state) {
+        if (state.messageList.length === 0 && state.newMessageList.length === 0) {
+            state.messageFlag = 'noMessage';
+        } else {
+            state.messageFlag = 'hasMessage';
+        }
+    },
+    // 改变新消息通知显示
+    changeNewMessageNumberFlag (state) {
+        state.newMessageNumberFlag = false;
     },
     // 设置保质期检查期限
     setDate (state, day) {
@@ -191,23 +210,42 @@ export default {
     },
     // 检查商品
     checkShopping (state) {
-        state.messageList = [];
+        state.messageList.splice(0, 0, ...state.newMessageList);
+        state.newMessageList = [];
         let newDate = new Date().getTime();
         for (let i = 0; i < state.shoppingList.length; i++) {
             let date = new Date(state.shoppingList[i].date).getTime();
             let dayNumber = Math.floor((date - newDate) / 1000 / 60 / 60 / 24);
-            if (dayNumber < state.dateLimit) {
+            // 检查保质期
+            if (dayNumber <= state.dateLimit) {
                 let obj = new Object();
                 obj.name = 'date';
                 obj.date = dayNumber;
                 obj.shopping = state.shoppingList[i];
-                state.messageList.unshift(obj);
+                let flag = true;
+                for (let j = 0; j < state.messageList.length; j++) {
+                    if (state.messageList[j].name === obj.name && state.messageList[j].shopping === obj.shopping && state.messageList[j].date === obj.date) {
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    state.newMessageList.unshift(obj);
+                }
             }
-            if (state.shoppingList[i].number < state.numberLimit) {
+            // 检查库存
+            if (state.shoppingList[i].number <= state.numberLimit) {
                 let obj = new Object();
                 obj.name = 'number';
                 obj.shopping = state.shoppingList[i];
-                state.messageList.unshift(obj);
+                let flag = true;
+                for (let j = 0; j < state.messageList.length; j++) {
+                    if (state.messageList[j].name === obj.name && state.messageList[j].shopping === obj.shopping) {
+                        flag = false;
+                    }
+                }
+                if (flag === true) {
+                    state.newMessageList.unshift(obj);
+                }
             }
         }
     },

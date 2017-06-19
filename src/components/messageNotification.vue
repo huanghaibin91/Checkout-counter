@@ -6,12 +6,12 @@
                 <button title="消息通知设置" @click="changeSetFlag"></button>
                 <transition name="set-fade">
                     <form v-if="setFlag">
-                        <label for="setDate">保质期提醒时限</label>
+                        <label for="setDate">保质期提醒时限：</label>
                         <div>
                             <input id="setDate" v-model="setDate" placeholder="设置距离保质期间隔" />
                             <button @click="setDateLimit">确定</button>
                         </div>
-                        <label for="setNumber">库存提醒数量</label>
+                        <label for="setNumber">库存提醒数量：</label>
                         <div>
                             <input id="setNumber" v-model="setNumber" placeholder="设置距离库存差额" />
                             <button @click="setNumberLimit">确定</button>
@@ -21,9 +21,19 @@
             </div>
         </div>
         <p v-if="messageFlag === 'noMessage'">没有消息通知！</p>
-        <div v-else-if="messageFlag === 'hasMessage'" class="message-list" v-for="message in messageList">
-            <p v-if="message.name === 'date'">商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}保质期至<span>{{ message.shopping.date }}</span>，还剩<span>{{ message.date }}</span>天,请尽快销售！</p>
-            <p v-else-if="message.name === 'number'">商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}库存仅剩<span>{{ message.shopping.number}}</span>份，请尽快补充！</p>
+        <div  v-else-if="messageFlag === 'hasMessage'">
+            <div class="message-list" v-for="message in newMessageList">
+                <div  v-if="message.name === 'date'">
+                    <p>商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}保质期至<span>{{ message.shopping.date }}</span>，还剩<span>{{ message.date }}</span>天,请尽快销售！</p><i>new</i>
+                </div>
+                <div  v-else-if="message.name === 'number'">
+                    <p>商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}库存仅剩<span>{{ message.shopping.number}}</span>份，请尽快补充！</p><i>new</i>
+                </div>
+            </div>
+            <div class="message-list" v-for="message in messageList">
+                <p v-if="message.name === 'date'">商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}保质期至<span>{{ message.shopping.date }}</span>，还剩<span>{{ message.date }}</span>天,请尽快销售！</p>
+                <p v-else-if="message.name === 'number'">商品编码{{ message.shopping.coding }}，{{ message.shopping.name }}库存仅剩<span>{{ message.shopping.number}}</span>份，请尽快补充！</p>
+            </div>
         </div>
     </div>
 </template>
@@ -36,7 +46,6 @@
         name: 'messageNotification',
         data () {
             return {
-                messageFlag: 'hasMessage',
                 setFlag: false,
                 setDate: '',
                 setNumber: '',
@@ -44,6 +53,8 @@
         },
         computed: {
             ...mapState([
+                'messageFlag',
+                'newMessageList',
                 'messageList',
             ]),
         },
@@ -54,18 +65,24 @@
             },
             // 设置保质期时限
             setDateLimit () {
-                let date = parseInt(this.setDate);
-                if (typeof date === 'number') {
+                let date = this.setDate;
+                let reg = /^[1-9]\d*$/g;
+                if (reg.test(date)) {
                     this.$store.commit('setDate', date);
                     this.changeSetFlag();
+                } else {
+                    alert('请输入数字');
                 }
             },
             // 设置库存限额
             setNumberLimit () {
                 let number = parseInt(this.setNumber);
-                if (typeof number === 'number') {
+                let reg = /^[1-9]\d*$/g;
+                if (reg.test(number)) {
                     this.$store.commit('setNumber', number);
                     this.changeSetFlag();
+                } else {
+                    alert('只能输入数字');
                 }
             }
         }
@@ -142,7 +159,7 @@
             }
             
         }
-        p {
+        >p {
             text-align: center;
         }
         div.message-list {
@@ -152,6 +169,15 @@
             padding: 5px 35px;
             border-radius: 5px;
             background: #eaffd0 url('../assets/image/list.png') no-repeat 5px center;
+            >div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                i {
+                    font-weight: bold;
+                    color: red;
+                }
+            }
             span {
                 padding: 0px 5px;
                 font-weight: bold;

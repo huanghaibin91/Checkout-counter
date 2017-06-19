@@ -13,7 +13,7 @@
             <button @click="addShoppingNum(getShopping)">+</button>
         </td>
         <td>
-            {{ getShopping.price }}
+            ￥&nbsp;{{ getShopping.price }}
         </td>
         <td>
             ￥&nbsp;<span>{{ shoppingPrice(getShopping) }}</span>

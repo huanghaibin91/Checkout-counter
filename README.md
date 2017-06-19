@@ -1,30 +1,47 @@
 # checkout-counter
 
-> A Vue.js project
+> vue-cli构建的小商店收银及商品管理系统
 
-## Build Setup
+## 写在前面
 
-``` bash
-# install dependencies
-npm install
+我目前还不会后端部分，所以整个项目的所有都是写在前端里边的，所以现在它是一个不完整也不能真正能够使用的项目。等我以后会后端之后，再补充完整，努力让它能够真正使用。好处是目前这里边没有后端部分，如果有同样和我一样学习前端的朋友，我希望这个能够有一点参考价值。
+		
+	- 登录界面用户名和密码可以随意输入（因为没有后端）
+	- 入库新商品的时候，要将商品图片名称改为`商品编码.jpg`的名称，然后放到项目文件夹的`src/assets/shopping-images`文件里边，就可以正确显示商品图片。
+	- 上面就是一个我不会的问题，我发现我用<input type="file" />不能获取本地文件的路径，网上说是浏览器的安全设置导致不能获取文件路径，这个是不是得后端，先将图片文件上传到服务器，然后用服务器路径获取图片。希望有大佬能帮我解惑。
+	
+## 项目组成
+- 头部登录及导航部分
+- 商品展示部分
+- 购物车部分
+- 商品入库及操作部分
+- 收银记录
+- 商品重要消息通知
 
-# serve with hot reload at localhost:8080
-npm run dev
+## 项目启动
 
-# build for production with minification
-npm run build
+``` 
 
-# build for production and view the bundle analyzer report
-npm run build --report
+	// 将源码clone或下载压缩包到本地
 
-# run unit tests
-npm run unit
+	// git bash到项目文件夹
 
-# run e2e tests
-npm run e2e
+	// 安装依赖包
+  	npm install
 
-# run all tests
-npm test
+  	// 启动项目
+  	npm run dev
+	
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 项目图片
+
+![](../src/assets/image/1.png)
+![](../src/assets/image/2.png)
+![](../src/assets/image/3.png)
+![](../src/assets/image/4.png)
+![](../src/assets/image/5.png)
+![](../src/assets/image/6.png)
+
+
+

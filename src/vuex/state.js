@@ -1,8 +1,6 @@
 export default  {
     // 登录账号
     accoutName: '',
-    // 消息提醒
-    messageNumberFlag: false,
 
     // 商品列表
     shoppingList: [
@@ -59,7 +57,13 @@ export default  {
     // 收银记录列表
     shoppingRecordList: [],
 
+    // 消息通知部分
+    // 消息提醒
+    newMessageNumberFlag: false,
+    // 消息列表显示
+    messageFlag: 'noMessage',
     // 消息列表
+    newMessageList: [],
     messageList: [],
     // 消息设置
     // 保质期

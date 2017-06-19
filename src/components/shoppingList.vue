@@ -77,7 +77,7 @@
             },
             // 添加商品至购物车列表
             addShoppingCart (shopping) {
-                if (!this.shoppingCartList.includes(shopping)) {
+                if (!this.shoppingCartList.includes(shopping) && (shopping.number > 0)) {
                     this.$store.commit('addShoppingCart', shopping);
                     this.$store.commit('checkShoppingCartList');
                 }

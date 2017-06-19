@@ -27,4 +27,8 @@ export default {
     messageListNumber (state) {
         return state.messageList.length;
     },
+    // 新消息通知数量
+    newMessageListNumber (state) {
+        return state.newMessageList.length;
+    },
 }
