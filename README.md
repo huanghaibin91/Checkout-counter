@@ -1,12 +1,8 @@
 # checkout-counter
 
-<<<<<<< HEAD
-> vue-cli构建的小商店收银及商品管理系统
-> 
-> 这个项目中的一个小组件date-picker组件[点击查看](https://github.com/huanghaibin91/Date-Pickers)
-=======
 > vue-cli构建的小商店收银及商品管理系统，觉得不错可以star一下，谢谢。
->>>>>>> origin/master
+
+> 这个项目中的一个小组件date-picker组件[点击查看](https://github.com/huanghaibin91/Date-Pickers)
 
 ## 写在前面
 
