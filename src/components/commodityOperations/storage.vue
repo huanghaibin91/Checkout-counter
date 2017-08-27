@@ -234,7 +234,7 @@
         border-radius: 10px;
         box-shadow: 0px 2px 2px #ccc;
         position: absolute;
-        top: 50px;
+        top: 0px;
         left: 0px;
         right: 0px;
         >div.storage-title {
@@ -299,7 +299,6 @@
             width: 500px;
             margin: auto;
             padding: 20px 50px;
-            margin-bottom: 150px;
             >div {
                 display: flex;
                 margin: 40px 0px;
@@ -338,6 +337,9 @@
                     >div {
                         margin: 0;
                         padding: 0;
+                    }
+                    .calendar .date-box {
+                        width: 300px;
                     }
                 }
             }
