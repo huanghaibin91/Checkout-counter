@@ -1,5 +1,7 @@
 # checkout-counter
 
+这个是早前写的，有不少问题，样式也是自己写的，不怎么好看，我后面又写了一个改进型，![改进型地址](https://github.com/huanghaibin91/V-Shop)
+
 > vue-cli构建的小商店收银及商品管理系统，觉得不错可以star一下，谢谢。
 
 > 这个项目中的一个小组件date-picker组件[点击查看](https://github.com/huanghaibin91/Date-Pickers)
